@@ -1,4 +1,4 @@
-import bluetooth 
+from pybluez import bluetooth 
 import json
 import time
 import subprocess
