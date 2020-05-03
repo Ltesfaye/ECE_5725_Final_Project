@@ -3,12 +3,11 @@ import json
 import time
 import subprocess
 import os
-from SpectralData import SpectralData
+
 
 # Global Variables
 srcPath = "../data-collector/build/data-collector"
 dirPath = os.path.dirname(os.path.realpath(__file__))
-spectralData = SpectralData()
 sendString = ""
 
 while True:
