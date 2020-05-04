@@ -1,4 +1,4 @@
-from pybluez import bluetooth 
+import bluetooth 
 import json
 import time
 import subprocess
@@ -18,7 +18,7 @@ while True:
     port = serverSocket.getsockname()[1]
     serverSocket.listen(1)
 
-    print "listening on port", port
+    print ("listening on port", port)
 
     # Advertise Socket
     uuid = "2f3b0104-fcb0-4bcf-8dda-6b06390c3c1a"
@@ -26,5 +26,15 @@ while True:
 
     # Wait for client to connect
     clientSocket, address = serverSocket.accept()
-    print "Accepted connection from ", address
+    print ("Accepted connection from ", address)
+
+
+    try:
+        while True:
+            data = clientSocket.recv(1024)
+            print(json.loads(data))
+
+    except IOError:
+        print('WTF')
+
 
