@@ -3,7 +3,7 @@ import bluetooth
 server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
 port=1
-server_sock.blind(("",port))
+server_sock.bind(("",port))
 server_sock.listen(1)
 
 client_sock,address = server_sock.accept()
