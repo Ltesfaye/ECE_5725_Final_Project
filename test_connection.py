@@ -36,4 +36,4 @@ def lookUpNearbyBluetoothDevices():
     print str(bluetooth.lookup_name( bdaddr )) + " [" + str(bdaddr) + "]"
     
     
-lookUpNearbyBluetoothDevices()
+receiveMessages()
