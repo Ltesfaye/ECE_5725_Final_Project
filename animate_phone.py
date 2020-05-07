@@ -79,7 +79,7 @@ class Animate_phone:
         # Draw Function
         @window.event
         def on_draw():
-            data = str(self.client_sock.recv(1024)).decode('utf-8')
+            data = str(self.client_sock.recv(1024).decode('utf-8'))
             data= data.split(',')
 
             if len(data)==9:
