@@ -23,6 +23,8 @@ class Animate_phone:
         self.client_sock = client_sock
         self.server_sock = server_sock
 
+        
+
         #Default stats label to be displayed
         self.stats = ['Fall Status: False','Fall Distance: Nan']
 
@@ -77,8 +79,23 @@ class Animate_phone:
         # Draw Function
         @window.event
         def on_draw():
-            data = self.client_sock.recv(1024)
-            print ("received [%s]" %data)
+            data = str(self.client_sock.recv(1024)).decode('utf-8')
+            data= data.split(',')
+
+            if len(data)==9:
+                if data[0]=="~~":
+                    pass 
+                elif data[0]=="##":
+                    self.stats[1] ='Fall Distance: '+data[1]
+                
+                elif data[0] =="**":
+                    pass
+                
+
+                self.stats[0] ='Fall Status: '+data[2]
+                    
+
+
             self.torus2.rotation.x = 90
             
             if self.stats[0] =='Fall Status: False':
