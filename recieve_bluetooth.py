@@ -1,7 +1,7 @@
 import bluetooth
 from animate_phone import Animate_phone
 
-debug = True
+debug = False
 server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
 port=1

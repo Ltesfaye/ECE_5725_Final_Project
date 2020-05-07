@@ -4,10 +4,10 @@ import ratcave as rc
 from pyglet.window import key
 import time
 import math
-from shader import vert_shader,frag_shader
 import bluetooth
 
-shader = rc.Shader(vert=vert_shader, frag=frag_shader)
+# from shader import vert_shader,frag_shader
+# shader = rc.Shader(vert=vert_shader, frag=frag_shader)
 # Create window and OpenGL context 
 window = pyglet.window.Window()
 
