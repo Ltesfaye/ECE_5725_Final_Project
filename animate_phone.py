@@ -98,7 +98,7 @@ class Animate_phone:
 
             self.torus2.rotation.x = 90
             
-            if self.stats[0] =='Fall Status: False':
+            if data[2] =='false':
                 self.scene.bgColor = 138/255, 113/255, 145/255
             else:
                 self.scene.bgColor = 12/255, 100/255, 12/255
