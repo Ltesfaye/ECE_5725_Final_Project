@@ -9,7 +9,7 @@ import bluetooth
 # from shader import vert_shader,frag_shader
 # shader = rc.Shader(vert=vert_shader, frag=frag_shader)
 # Create window and OpenGL context 
-window = pyglet.window.Window()
+window = pyglet.window.Window(fullscreen=True)
 
 class Animate_phone:
 
