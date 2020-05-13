@@ -26,7 +26,7 @@ else:
     from animate_phone import Animate_phone
     print("____Starting Display____")
     display = Animate_phone(client_sock,server_sock)
-    display.start_local_threads()
+
     display.run()
 
 

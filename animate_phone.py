@@ -7,12 +7,12 @@ import math
 import bluetooth
 
 from queue import Queue
-from threading import Thread
+import threading
 
 
 # Create window and OpenGL context 
 window = pyglet.window.Window()
-window.set_size( int(700), int(380) )
+window.set_size(int(700), int(380))
 
 
 class Animate_phone:
@@ -27,10 +27,6 @@ class Animate_phone:
         self.client_sock = client_sock
         self.server_sock = server_sock
 
-
-        #Creating the bluetooth recieve thread
-        self.bluetooth_thread = Thread(target=self.read_from_client)
-        
         #Default stats label to be displayed
         self.stats = ['Fall Status: False','Fall Distance: Nan']
 
@@ -73,8 +69,6 @@ class Animate_phone:
         #exit game condition
         self.end_game=False
 
-    def start_local_threads(self):
-        self.bluetooth_thread.start()
 
     def save_and_close_animation_doc(self):
         timestr = time.strftime("%Y%m%d-%H%M%S")
@@ -109,27 +103,31 @@ class Animate_phone:
             self.animation_data.append((time,temp[:3]))
             
 
-
+        '''
+        #Transmission data format
+        # "**,"+ System.currentTimeMillis()+","+this.is_falling()+","+Orientation[0]+","+Orientation[1]+","+Orientation[2]+","+vx+","+vy+","+vz+"\n";
+                                                            #total height
+        '''
     def read_from_client(self):
-            data = str(self.client_sock.recv(1024).decode('utf-8'))
-            data= data.split(',')
-            print(data)
-            #"**,"+ System.currentTimeMillis()+","+this.is_falling()+","+Orientation[0]+","+Orientation[1]+","+Orientation[2]+","+vx+","+vy+","+vz+"\n";
-                                                 #total height
-            if len(data)== 9:
-                if data[0]=="~~":
-                    self.stats[1] ='Fall Distance: tbd'
-                    self.parse_save_data(data,1)
-                    
-
-                elif data[0]=="##":
-                    self.stats[1] ='Fall Distance: '+data[2]
-                    self.parse_save_data(data,2)
-                    self.save_and_close_animation_doc()
+            while True:
+                data = str(self.client_sock.recv(1024).decode('utf-8'))
+                data= data.split(',')
                 
-                elif data[0] =="**":
-                    self.stats[1] ='Fall Distance: tbd'
-                    self.parse_save_data(data,0)
+                
+                if len(data)== 9:
+                    if data[0]=="~~":
+                        self.stats[1] ='Fall Distance: tbd'
+                        self.parse_save_data(data,1)
+                        
+
+                    elif data[0]=="##":
+                        self.stats[1] ='Fall Distance: '+data[2]
+                        self.parse_save_data(data,2)
+                        self.save_and_close_animation_doc()
+                    
+                    elif data[0] =="**":
+                        self.stats[1] ='Fall Distance: tbd'
+                        self.parse_save_data(data,0)
                     
                 
     # Constantly and updating background color
@@ -157,9 +155,14 @@ class Animate_phone:
     
 
     def run(self):
-        # Pyglet's event loop run function
-    
-        # Draw Function
+
+        #Creating the bluetooth recieve thread
+        self.bluetooth_thread = threading.Thread(target=self.read_from_client)
+
+        #starts bluetooth event listener
+        self.bluetooth_thread.start()
+        
+        # pyglet draw loop
         @window.event
         def on_draw():
 
@@ -182,7 +185,8 @@ class Animate_phone:
                 self.client_sock.close()
                 self.server_sock.close()
                 pyglet.app.EventLoop().exit()
-        # pyglet.app.run()
+
+        pyglet.app.run()
         
 
 
