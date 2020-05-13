@@ -6,10 +6,17 @@ import time
 import math
 import bluetooth
 
-# from shader import vert_shader,frag_shader
-# shader = rc.Shader(vert=vert_shader, frag=frag_shader)
+from queue import Queue
+from threading import Thread
+
+
 # Create window and OpenGL context 
-window = pyglet.window.Window(fullscreen=True)
+window = pyglet.window.Window(resizable=True)
+
+@window.event
+def on_resize( width, height ):
+    ratio = 108/192
+    window.set_size( int(width), int(width*ratio) )
 
 class Animate_phone:
 
@@ -23,8 +30,10 @@ class Animate_phone:
         self.client_sock = client_sock
         self.server_sock = server_sock
 
-        
 
+        #Creating the bluetooth recieve thread
+        self.bluetooth_thread = Thread(target=self.read_from_client)
+        
         #Default stats label to be displayed
         self.stats = ['Fall Status: False','Fall Distance: Nan']
 
@@ -40,23 +49,98 @@ class Animate_phone:
         self.torus.uniforms['diffuse'] = [1, 0, 0]
         self.torus2.uniforms['diffuse'] = [0, 0, 1]
 
+        #setting up the defaults
+        self.azimuth = 0
+        self.pitch = 0
+        self.roll = 0
+
+        self.vx = 0
+        self.vy = 0
+        self.vz = 0
+
         #add meshes to scene
         self.scene = rc.Scene(meshes=[self.sphere,self.torus,self.torus2])
 
         #set up scene background color
         self.scene.bgColor = 138/255, 113/255, 145/255
 
+        self.save_data = [0,0,0,0]
+
         #schdules the update and user input functions to run
         pyglet.clock.schedule(self.update)
         pyglet.clock.schedule(self.user_inputs)
 
+        #used to display animation
+        self.begin_animation = False
+
         #exit game condition
         self.end_game=False
 
+    def start_local_threads(self):
+        self.bluetooth_thread.start()
 
-    # Constantly-Running mesh rotation, for fun
+    def save_and_close_animation_doc(self):
+        timestr = time.strftime("%Y%m%d-%H%M%S")
+        with open(''.join([timestr,".txt"]), "w") as output:
+            output.write(str(self.animation_data))
+        pass
+    
+
+    def parse_save_data(self,data,state):
+        time = float(data[1])
+
+        temp = data[3:]
+        temp = [float(i) for i in temp] 
+
+        self.azimuth = temp[0]
+        self.pitch = temp[1]
+        self.roll = temp[2]
+
+        self.vx = temp[3]
+        self.vy = temp[4]
+        self.vz = temp[5]
+
+        if state==0:
+            self.inital_velocity = temp[3:]
+            self.animation_data =[(time,temp[:3])]
+            
+        elif state==1:
+            self.animation_data.append((time,temp[:3]))
+        else:
+            #begin animation
+            self.begin_animation = True
+            self.animation_data.append((time,temp[:3]))
+            
+
+
+    def read_from_client(self):
+            data = str(self.client_sock.recv(1024).decode('utf-8'))
+            data= data.split(',')
+            #"**,"+ System.currentTimeMillis()+","+this.is_falling()+","+Orientation[0]+","+Orientation[1]+","+Orientation[2]+","+vx+","+vy+","+vz+"\n";
+                                                 #total height
+            if len(data)== 9:
+                if data[0]=="~~":
+                    self.stats[1] ='Fall Distance: tbd'
+                    self.parse_save_data(data,1)
+                    
+
+                elif data[0]=="##":
+                    self.stats[1] ='Fall Distance: '+data[2]
+                    self.parse_save_data(data,2)
+                    self.save_and_close_animation_doc()
+                
+                elif data[0] =="**":
+                    self.stats[1] ='Fall Distance: tbd'
+                    self.parse_save_data(data,0)
+                    
+                
+    # Constantly and updating background color
     def update(self,dt):
-        self.torus.rotation.y += 40. * dt
+        if  'false' in self.stats[0].lower():
+                self.scene.bgColor = 138/255, 113/255, 145/255
+        else:
+                self.scene.bgColor = 12/255, 100/255, 12/255
+        
     
 
     # Constantly checks for new user inputs and processes it accordingly
@@ -79,31 +163,10 @@ class Animate_phone:
         # Draw Function
         @window.event
         def on_draw():
-            data = str(self.client_sock.recv(1024).decode('utf-8'))
-            data= data.split(',')
-
-            if len(data)==9:
-                if data[0]=="~~":
-                    pass 
-                elif data[0]=="##":
-                    self.stats[1] ='Fall Distance: '+data[1]
-                
-                elif data[0] =="**":
-                    pass
-                
-
-                self.stats[0] ='Fall Status: '+data[2]
-                    
-
 
             self.torus2.rotation.x = 90
-            
-            if data[2] =='false':
-                self.scene.bgColor = 138/255, 113/255, 145/255
-            else:
-                self.scene.bgColor = 12/255, 100/255, 12/255
-            
-
+            self.torus.rotation.y = self.pitch
+            self.torus2.rotation.y = self.roll
 
             with rc.default_shader:
                 self.scene.draw()
@@ -121,7 +184,7 @@ class Animate_phone:
                 self.server_sock.close()
                 pyglet.app.EventLoop().exit()
         pyglet.app.run()
-        pass
+        
 
 
 

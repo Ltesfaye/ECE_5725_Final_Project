@@ -1,5 +1,6 @@
 import bluetooth
 from animate_phone import Animate_phone
+from threading import Thread
 
 debug = False
 server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
