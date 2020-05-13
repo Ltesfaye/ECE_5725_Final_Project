@@ -113,6 +113,7 @@ class Animate_phone:
     def read_from_client(self):
             data = str(self.client_sock.recv(1024).decode('utf-8'))
             data= data.split(',')
+            print(data)
             #"**,"+ System.currentTimeMillis()+","+this.is_falling()+","+Orientation[0]+","+Orientation[1]+","+Orientation[2]+","+vx+","+vy+","+vz+"\n";
                                                  #total height
             if len(data)== 9:
@@ -181,7 +182,7 @@ class Animate_phone:
                 self.client_sock.close()
                 self.server_sock.close()
                 pyglet.app.EventLoop().exit()
-        pyglet.app.run()
+        # pyglet.app.run()
         
 
 
