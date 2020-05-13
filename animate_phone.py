@@ -102,7 +102,7 @@ class Animate_phone:
             self.begin_animation = True
             self.animation_data.append((time,temp[:3]))
         
-        def valid_data(self,data):
+    def valid_data(self,data):
             return all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:])
 
         '''
