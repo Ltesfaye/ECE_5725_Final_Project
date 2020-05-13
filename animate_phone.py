@@ -101,7 +101,9 @@ class Animate_phone:
             #begin animation
             self.begin_animation = True
             self.animation_data.append((time,temp[:3]))
-            
+        
+        def valid_data(self,data):
+            return all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:])
 
         '''
         #Transmission data format
@@ -112,7 +114,7 @@ class Animate_phone:
             while True:
                 data = str(self.client_sock.recv(1024).decode('utf-8'))
                 data= data.split(',')
-                if len(data)== 9 and not(re.match(r'^-?\d+(?:\.\d+)?$', data[1]) is None):
+                if len(data)== 9 and self.valid_data(data):
                    
                     if data[0]=="~~":
                         self.stats[1] ='Fall Distance: tbd'
