@@ -24,6 +24,7 @@ if debug:
             break
 else:
     display = Animate_phone(client_sock,server_sock)
+    display.start_local_threads()
     display.run()
 
 
