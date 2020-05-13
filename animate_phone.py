@@ -12,7 +12,7 @@ from threading import Thread
 
 # Create window and OpenGL context 
 window = pyglet.window.Window()
-window.set_size( int(380), int(700) )
+window.set_size( int(700), int(380) )
 
 
 class Animate_phone:
