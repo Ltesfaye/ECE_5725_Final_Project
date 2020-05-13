@@ -105,12 +105,12 @@ class Animate_phone:
     def valid_data(self,data):
             return all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:])
 
-        '''
-        #Transmission data format
-        # "**,"+ System.currentTimeMillis()+","+this.is_falling()+","+Orientation[0]+","+Orientation[1]+","+Orientation[2]+","+vx+","+vy+","+vz+"\n";
-                                                            #total height
-        '''
     def read_from_client(self):
+            '''
+            #Transmission data format
+            # "**,"+ System.currentTimeMillis()+","+this.is_falling()+","+Orientation[0]+","+Orientation[1]+","+Orientation[2]+","+vx+","+vy+","+vz+"\n";
+                                                                #total height
+            '''
             while True:
                 data = str(self.client_sock.recv(1024).decode('utf-8'))
                 data= data.split(',')
