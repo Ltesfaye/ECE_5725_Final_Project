@@ -1,7 +1,7 @@
 import bluetooth
 from threading import Thread
 
-debug = True
+debug = False
 server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
 port=1
