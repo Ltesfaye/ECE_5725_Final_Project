@@ -57,8 +57,10 @@ def user_inputs(dt):
 pyglet.clock.schedule(user_inputs)
 
 
-# from shader import vert_shader,frag_shader
-# shader = rc.Shader(vert=vert_shader, frag=frag_shader)
+@window.event
+def on_resize( width, height ):
+    ratio = 108/192
+    window.set_size( int(width), int(width*ratio) )
 
 
 # Draw Function

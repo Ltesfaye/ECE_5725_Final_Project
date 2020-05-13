@@ -13,10 +13,6 @@ from threading import Thread
 # Create window and OpenGL context 
 window = pyglet.window.Window(resizable=True)
 
-@window.event
-def on_resize( width, height ):
-    ratio = 108/192
-    window.set_size( int(width), int(width*ratio) )
 
 class Animate_phone:
 
@@ -160,6 +156,11 @@ class Animate_phone:
 
     def run(self):
         # Pyglet's event loop run function
+        @window.event
+        def on_resize( width, height ):
+            ratio = 108/192
+            window.set_size( int(width), int(width*ratio) )
+
         # Draw Function
         @window.event
         def on_draw():
