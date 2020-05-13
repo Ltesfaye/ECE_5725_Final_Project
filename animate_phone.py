@@ -1,13 +1,12 @@
 
+import time
+import math
 import pyglet
 import ratcave as rc
 from pyglet.window import key
-import time
-import math
-import bluetooth
-
-from queue import Queue
+from collections import deque
 import threading
+import bluetooth
 
 
 # Create window and OpenGL context 
@@ -57,8 +56,6 @@ class Animate_phone:
         #set up scene background color
         self.scene.bgColor = 138/255, 113/255, 145/255
 
-        self.save_data = [0,0,0,0]
-
         #schdules the update and user input functions to run
         pyglet.clock.schedule(self.update)
         pyglet.clock.schedule(self.user_inputs)
@@ -68,12 +65,13 @@ class Animate_phone:
 
         #exit game condition
         self.end_game=False
+        self.animation_data = deque()
 
 
     def save_and_close_animation_doc(self):
         timestr = time.strftime("%Y%m%d-%H%M%S")
         with open(''.join([timestr,".txt"]), "w") as output:
-            output.write(str(self.animation_data))
+            output.write(str(list(self.animation_data)))
         pass
     
 
@@ -90,10 +88,12 @@ class Animate_phone:
         self.vx = temp[3]
         self.vy = temp[4]
         self.vz = temp[5]
+        
 
         if state==0:
             self.inital_velocity = temp[3:]
-            self.animation_data =[(time,temp[:3])]
+            self.animation_data.clear()
+            self.animation_data.append((time,temp[:3]))
             
         elif state==1:
             self.animation_data.append((time,temp[:3]))
@@ -113,21 +113,26 @@ class Animate_phone:
                 data = str(self.client_sock.recv(1024).decode('utf-8'))
                 data= data.split(',')
                 
-                
                 if len(data)== 9:
+
                     if data[0]=="~~":
                         self.stats[1] ='Fall Distance: tbd'
+                        self.stats[0] = ''.join(['Fall Status: ', str('true' in data[2])])
                         self.parse_save_data(data,1)
                         
 
                     elif data[0]=="##":
                         self.stats[1] ='Fall Distance: '+data[2]
+                        self.stats[0] = 'Fall Status: False'
                         self.parse_save_data(data,2)
                         self.save_and_close_animation_doc()
                     
                     elif data[0] =="**":
                         self.stats[1] ='Fall Distance: tbd'
+                        self.stats[0] = ''.join(['Fall Status: ', str('true' in data[2])])
                         self.parse_save_data(data,0)
+
+                    time.sleep(0.016)
                     
                 
     # Constantly and updating background color

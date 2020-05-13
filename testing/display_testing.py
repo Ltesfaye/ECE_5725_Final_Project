@@ -92,11 +92,5 @@ def on_draw():
 
 
 
-
-
-
-
-
-
 # Pyglet's event loop run function
 pyglet.app.run()
