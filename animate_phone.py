@@ -112,27 +112,26 @@ class Animate_phone:
             while True:
                 data = str(self.client_sock.recv(1024).decode('utf-8'))
                 data= data.split(',')
-                if not(re.match(r'^-?\d+(?:\.\d+)?$', data[1]) is None):
-                    if len(data)== 9:
-
-                        if data[0]=="~~":
-                            self.stats[1] ='Fall Distance: tbd'
-                            self.stats[0] = ''.join(['Fall Status: ', str('true' in data[2])])
-                            self.parse_save_data(data,1)
-                            
-
-                        elif data[0]=="##":
-                            self.stats[1] ='Fall Distance: '+data[2]
-                            self.stats[0] = 'Fall Status: False'
-                            self.parse_save_data(data,2)
-                            self.save_and_close_animation_doc()
+                if len(data)== 9 and not(re.match(r'^-?\d+(?:\.\d+)?$', data[1]) is None):
+                   
+                    if data[0]=="~~":
+                        self.stats[1] ='Fall Distance: tbd'
+                        self.stats[0] = ''.join(['Fall Status: ', str('true' in data[2])])
+                        self.parse_save_data(data,1)
                         
-                        elif data[0] =="**":
-                            self.stats[1] ='Fall Distance: tbd'
-                            self.stats[0] = ''.join(['Fall Status: ', str('true' in data[2])])
-                            self.parse_save_data(data,0)
 
-                        time.sleep(0.016)
+                    elif data[0]=="##":
+                        self.stats[1] ='Fall Distance: '+data[2]
+                        self.stats[0] = 'Fall Status: False'
+                        self.parse_save_data(data,2)
+                        self.save_and_close_animation_doc()
+                    
+                    elif data[0] =="**":
+                        self.stats[1] ='Fall Distance: tbd'
+                        self.stats[0] = ''.join(['Fall Status: ', str('true' in data[2])])
+                        self.parse_save_data(data,0)
+
+                    time.sleep(0.016)
                     
                 
     # Constantly and updating background color
