@@ -168,18 +168,8 @@ class Animate_phone:
             #quiting the display
             self.end_game= True
 
-            
-    
-
-    def run(self):
-
-        #Creating the bluetooth recieve thread
-        self.bluetooth_thread = threading.Thread(target=self.read_from_client)
-
-        #starts bluetooth event listener
-        self.bluetooth_thread.start()
-        
-        # pyglet draw loop
+    def draw_display(self):
+          # pyglet draw loop
         @window.event
         def on_draw():
 
@@ -218,7 +208,22 @@ class Animate_phone:
                 self.server_sock.close()
                 pyglet.app.EventLoop().exit()
 
-        pyglet.app.run()
+        pyglet.app.run() 
+        pass    
+    
+
+    def run(self):
+
+        #Creating the GUI recieve thread
+        self.gui_thread = threading.Thread(target=self.draw_display)
+
+        #starts GUI listener
+        self.gui_thread.start()
+
+        #Start the main thread to recieve data
+        self.read_from_client()
+        
+      
         
 
 
