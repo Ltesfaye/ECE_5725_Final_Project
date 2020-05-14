@@ -32,7 +32,6 @@ class Animate_phone:
 
         #exit game condition
         self.animation_data = deque()
-        self.display_data = Queue()
         
 
         self.iter_barrier = threading.Barrier(2)
@@ -58,7 +57,6 @@ class Animate_phone:
         self.vy = temp[4]
         self.vz = temp[5]
 
-        self.display_data.put(temp+[s0,s1])
         self.stats[0] = s0
         self.stats[1] = s1
 
@@ -110,48 +108,21 @@ class Animate_phone:
                     if save:
                         self.save_and_close_animation_doc()
 
-                    # self.iter_barrier.wait()
-                    # self.iter_barrier.wait()
+                    self.iter_barrier.wait()
+                    self.iter_barrier.wait()
     
-    def run(self):
+    def run(self,debug=False):
         self.bluetoth_thread = threading.Thread(target=self.get_recent_valid_data)
         self.bluetoth_thread.start()
-        start = time.time()
-        counter = 0
+
         while True:
-            # self.iter_barrier.wait()
-            
+            self.iter_barrier.wait()
 
-            if not(self.display_data.empty()):
-                _=self.display_data.get()
-                counter +=1
-                if counter ==10:
-                    print("Time for 10 data",time.time()-start)
-                print(counter)
-            #     print(self.display_data.get())
+            print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
 
-            # self.iter_barrier.wait()
+            self.iter_barrier.wait()
         
         
 
 
 
-    # def update(self,dt):
-    #     if  'false' in self.stats[0].lower():
-    #             self.scene.bgColor = 138/255, 113/255, 145/255
-    #     else:
-    #             self.scene.bgColor = 12/255, 100/255, 12/255
-        
-    #     # if not(self.display_data.empty()):
-    #     #         next_up = self.display_data.get()
-                
-    #     #         self.azimuth = next_up[0]
-    #     #         self.pitch = next_up[1]
-    #     #         self.roll = next_up[2]
-
-    #     #         self.vx = next_up[3]
-    #     #         self.vy = next_up[4]
-    #     #         self.vz = next_up[5]
-
-    #     #         self.stats[0] = next_up[6]
-    #     #         self.stats[1] = next_up[7]
