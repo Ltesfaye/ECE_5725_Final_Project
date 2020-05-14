@@ -97,16 +97,15 @@ class Plotter:
         self.roll_figure.set_xlim([0,self.roll_counter])
         plt.draw()
         plt.show(block=block)
-        plt.pause(0.001)
         
     def add_3d_point(self, p, block= False , pause=True):
         self.update_3d_line(self.hl, p)
         plt.show(block=block)
         if pause:
-            plt.pause(0.001)
+            plt.pause(0.5)
     
     def start(self):
-        plt.show(block=False)
+        self.add_3d_point((0,0,0))
 
     def run_test(self):
         
