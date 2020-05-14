@@ -106,7 +106,7 @@ class Plotter:
             plt.pause(0.001)
     
     def start(self):
-        self.add_3d_point((0,0,0),pause=False)
+        plt.show(block=False)
 
     def run_test(self):
         
