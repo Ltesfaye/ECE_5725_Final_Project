@@ -5,6 +5,7 @@ import pyglet
 import ratcave as rc
 from pyglet.window import key
 from collections import deque
+from queue import Queue
 import threading
 import bluetooth
 
@@ -66,6 +67,8 @@ class Animate_phone:
         #exit game condition
         self.end_game=False
         self.animation_data = deque()
+        self.display_data = Queue()
+
 
 
     def save_and_close_animation_doc(self):
@@ -75,20 +78,13 @@ class Animate_phone:
         pass
     
 
-    def parse_save_data(self,data,state):
+    def parse_save_data(self,data,state,s0,s1):
         time = float(data[1])
-
         temp = data[3:]
         temp = [float(i) for i in temp] 
 
-        self.azimuth = temp[0]
-        self.pitch = temp[1]
-        self.roll = temp[2]
-
-        self.vx = temp[3]
-        self.vy = temp[4]
-        self.vz = temp[5]
         
+        self.display_data.put(temp+[s0,s1])
 
         if state==0:
             self.inital_velocity = temp[3:]
@@ -115,23 +111,38 @@ class Animate_phone:
                 data = str(self.client_sock.recv(1024).decode('utf-8'))
                 data= data.split(',')
                 if len(data)== 9 and self.valid_data(data):
-                   
+                    valid = False
+                    state = 1
+                    s1 = 'Fall Distance: tbd'
+                    s0 = 'Fall Status: False'
+                    save = False
+
                     if data[0]=="~~":
-                        self.stats[1] ='Fall Distance: tbd'
-                        self.stats[0] = ''.join(['Fall Status: ', str('true' in data[2])])
-                        self.parse_save_data(data,1)
-                        
+                        s0 = ''.join(['Fall Status: ', str('true' in data[2])])
+                        valid = True
+                        state = 1
+
+                    elif data[0] =="**":
+                        s0 = ''.join(['Fall Status: ', str('true' in data[2])])
+                        state =0
+
 
                     elif data[0]=="##":
-                        self.stats[1] ='Fall Distance: '+data[2]
-                        self.stats[0] = 'Fall Status: False'
-                        self.parse_save_data(data,2)
-                        self.save_and_close_animation_doc()
+                        s1 ='Fall Distance: '+data[2]
+                        state = 2
+                        save =True
+                        valid = True
+
+                    if valid:
+                        self.parse_save_data(data,state,s0,s1)
+                        if save:
+                            self.save_and_close_animation_doc()
+                        
+                       
+                        
                     
-                    elif data[0] =="**":
-                        self.stats[1] ='Fall Distance: tbd'
-                        self.stats[0] = ''.join(['Fall Status: ', str('true' in data[2])])
-                        self.parse_save_data(data,0)
+
+                    
 
                     time.sleep(0.016)
                     
@@ -173,8 +184,23 @@ class Animate_phone:
         def on_draw():
 
             self.torus2.rotation.x = 90
-            self.torus.rotation.y = self.pitch
-            self.torus2.rotation.y = self.roll
+            self.torus.rotation.y = self.roll
+            self.torus2.rotation.y = self.pitch
+
+            if not(self.display_data.empty()):
+                next_up = self.display_data.get()
+                
+                self.azimuth = next_up[0]
+                self.pitch = next_up[1]
+                self.roll = next_up[2]
+
+                self.vx = next_up[3]
+                self.vy = next_up[4]
+                self.vz = next_up[5]
+
+                self.stats[0] = next_up[6]
+                self.stats[0] = next_up[7]
+                
 
             with rc.default_shader:
                 self.scene.draw()
