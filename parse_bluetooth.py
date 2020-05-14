@@ -87,7 +87,7 @@ class Animate_phone:
     def get_recent_valid_data(self):
         plot = Plotter(self.display_stats())
         plot.start()
-        
+
         while True:
             self.iter_barrier.wait()
             self.stats[2] = "Pitch : "+str(self.pitch)
@@ -109,52 +109,6 @@ class Animate_phone:
                
             self.iter_barrier.wait()
 
-       ''' while True:
-            data = str(self.client_sock.recv(1024).decode('utf-8'))
-            data= data.split(',')
-            
-            if len(data)== 9 and self.valid_data(data):
-                valid = False
-                state = 1
-                s1 = 'Fall Distance: tbd'
-                s0 = 'Fall Status: False'
-                save = False
-
-                if data[0]=="~~":
-                    s0 = ''.join(['Fall Status: ', str('true' in data[2])])
-                    valid = True
-                    state = 1
-                    if self.start_time==0 and 'true' in data[2]:
-                        # if you missed the first data used the second best
-                        self.start_time = float(data[1])
-                        state = 0
-
-                    
-
-                elif data[0] =="**":
-                    s0 = ''.join(['Fall Status: ', str('true' in data[2])])
-                    self.start_time = float(data[1])
-                    state =0
-                    valid = True
-
-                elif data[0]=="##":
-                    s1 ='Fall Distance: '+data[2]
-                    self.fall_distance = data[2]
-                    state = 2
-                    self.begin_animation = True
-                    save =True
-                    valid = True
-                
-                
-
-                if valid:
-                    self.parse_save_data(data,state,s0,s1)
-                    if save:
-                        self.save_and_close_animation_doc()
-
-                    self.iter_barrier.wait()
-                    self.iter_barrier.wait()
-        '''
     def display_stats(self):
         display =""
         for i in self.stats:
@@ -217,28 +171,6 @@ class Animate_phone:
     
 
 
-      '''  while True:
-            self.iter_barrier.wait()
-            self.stats[2] = "Pitch : "+str(self.pitch)
-            self.stats[3] = "Roll : "+ str(self.roll)
-
-            # print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
-            # print(self.begin_animation)
-
-
-            plot.update_label(self.display_stats())
-            
-            if self.begin_animation:
-                
-                animation_data = self.animation_data.copy()
-                intial_valocity = self.inital_velocity.copy()
-                total_animation_time = self.end_time-self.start_time
-                print(intial_valocity,total_animation_time,len(animation_data))
-                self.begin_animation = False
-               
-            self.iter_barrier.wait()
-        
-        '''
 
 
 
