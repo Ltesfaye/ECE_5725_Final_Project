@@ -85,7 +85,17 @@ class Animate_phone:
         temp = [float(i) for i in temp] 
 
         
-        self.display_data.put(temp+[s0,s1])
+        # self.display_data.put(temp+[s0,s1])
+        self.azimuth = temp[0]
+        self.pitch = temp[1]
+        self.roll = temp[2]
+
+        self.vx = temp[3]
+        self.vy = temp[4]
+        self.vz = temp[5]
+
+        self.stats[0] = s0
+        self.stats[1] = s1
 
         if state==0:
             self.inital_velocity = temp[3:]
@@ -100,7 +110,7 @@ class Animate_phone:
             self.animation_data.append((time,temp[:3]))
         
     def valid_data(self,data):
-            return all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:])
+            return all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:]) and not(re.match(r'^-?\d+(?:\.\d+)?$', data[1]) is None)
 
       
     # Constantly and updating background color
@@ -110,19 +120,19 @@ class Animate_phone:
         else:
                 self.scene.bgColor = 12/255, 100/255, 12/255
         
-        if not(self.display_data.empty()):
-                next_up = self.display_data.get()
+        # if not(self.display_data.empty()):
+        #         next_up = self.display_data.get()
                 
-                self.azimuth = next_up[0]
-                self.pitch = next_up[1]
-                self.roll = next_up[2]
+        #         self.azimuth = next_up[0]
+        #         self.pitch = next_up[1]
+        #         self.roll = next_up[2]
 
-                self.vx = next_up[3]
-                self.vy = next_up[4]
-                self.vz = next_up[5]
+        #         self.vx = next_up[3]
+        #         self.vy = next_up[4]
+        #         self.vz = next_up[5]
 
-                self.stats[0] = next_up[6]
-                self.stats[1] = next_up[7]
+        #         self.stats[0] = next_up[6]
+        #         self.stats[1] = next_up[7]
     
 
     def get_recent_valid_data(self,dt):
