@@ -90,7 +90,6 @@ class Animate_phone:
         while True:
             data = str(self.client_sock.recv(1024).decode('utf-8'))
             data= data.split(',')
-            print(data[0],"HI")
             
             if len(data)== 9 and self.valid_data(data):
                 valid = False
@@ -115,6 +114,8 @@ class Animate_phone:
                     self.begin_animation = True
                     save =True
                     valid = True
+                
+                print(data[0],valid,"HI")
 
                 if valid:
                     self.parse_save_data(data,state,s0,s1)
