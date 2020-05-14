@@ -102,14 +102,22 @@ class Animate_phone:
                     s0 = ''.join(['Fall Status: ', str('true' in data[2])])
                     valid = True
                     state = 1
+                    if self.start_time==0 and 'true' in data[2]:
+                        # if you missed the first data used the second best
+                        self.start_time = float(data[1])
+                        state = 0
+
+                    
 
                 elif data[0] =="**":
                     s0 = ''.join(['Fall Status: ', str('true' in data[2])])
+                    self.start_time = float(data[1])
                     state =0
                     valid = True
 
                 elif data[0]=="##":
                     s1 ='Fall Distance: '+data[2]
+                    self.fall_distance = data[2]
                     state = 2
                     self.begin_animation = True
                     save =True
@@ -153,9 +161,8 @@ class Animate_phone:
                 intial_valocity = self.inital_velocity.copy()
                 total_animation_time = self.end_time-self.start_time
                 print(intial_valocity,total_animation_time,len(animation_data))
-                self.begin_animation = False
-                break
-
+                # self.begin_animation = False
+               
             self.iter_barrier.wait()
         
         
