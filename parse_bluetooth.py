@@ -135,7 +135,7 @@ class Animate_phone:
             
 
             print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
-            plot.update_label("HIIIIII")
+            plot.update_label(self.stats[0])
 
             self.iter_barrier.wait()
         
