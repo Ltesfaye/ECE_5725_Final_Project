@@ -149,8 +149,8 @@ class Animate_phone:
 
         while True:
             self.iter_barrier.wait()
-            self.stats[2] = "Pitch : "+self.pitch
-            self.stats[3] = "Roll : "+self.roll
+            self.stats[2] = "Pitch : "+str(self.pitch)
+            self.stats[3] = "Roll : "+ str(self.roll)
             # print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
             plot.update_label(self.display_stats())
             print(self.begin_animation)
