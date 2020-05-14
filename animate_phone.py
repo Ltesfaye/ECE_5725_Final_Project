@@ -101,50 +101,8 @@ class Animate_phone:
     def valid_data(self,data):
             return all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:])
 
-    def read_from_client(self):
-            '''
-            #Transmission data format
-            # "**,"+ System.currentTimeMillis()+","+this.is_falling()+","+Orientation[0]+","+Orientation[1]+","+Orientation[2]+","+vx+","+vy+","+vz+"\n";
-                                                                #total height
-            '''
-            while True:
-                data = str(self.client_sock.recv(1024).decode('utf-8'))
-                data= data.split(',')
-                if len(data)== 9 and self.valid_data(data):
-                    valid = False
-                    state = 1
-                    s1 = 'Fall Distance: tbd'
-                    s0 = 'Fall Status: False'
-                    save = False
 
-                    if data[0]=="~~":
-                        s0 = ''.join(['Fall Status: ', str('true' in data[2])])
-                        valid = True
-                        state = 1
-
-                    elif data[0] =="**":
-                        s0 = ''.join(['Fall Status: ', str('true' in data[2])])
-                        state =0
-
-
-                    elif data[0]=="##":
-                        s1 ='Fall Distance: '+data[2]
-                        state = 2
-                        save =True
-                        valid = True
-
-                    if valid:
-                        self.parse_save_data(data,state,s0,s1)
-                        if save:
-                            self.save_and_close_animation_doc()
-                        
-                       
-                        
-                    
-
-                    
-
-                    time.sleep(0.016)
+            
                     
                 
     # Constantly and updating background color
@@ -153,6 +111,21 @@ class Animate_phone:
                 self.scene.bgColor = 138/255, 113/255, 145/255
         else:
                 self.scene.bgColor = 12/255, 100/255, 12/255
+        
+        if not(self.display_data.empty()):
+                next_up = self.display_data.get()
+                
+                self.azimuth = next_up[0]
+                self.pitch = next_up[1]
+                self.roll = next_up[2]
+
+                self.vx = next_up[3]
+                self.vy = next_up[4]
+                self.vz = next_up[5]
+
+                self.stats[0] = next_up[6]
+                self.stats[0] = next_up[7]
+                
         
     
 
@@ -170,28 +143,14 @@ class Animate_phone:
 
     def draw_display(self):
           # pyglet draw loop
+        
         @window.event
         def on_draw():
-
             self.torus2.rotation.x = 90
             self.torus.rotation.y = self.roll
             self.torus2.rotation.y = self.pitch
 
-            if not(self.display_data.empty()):
-                next_up = self.display_data.get()
-                
-                self.azimuth = next_up[0]
-                self.pitch = next_up[1]
-                self.roll = next_up[2]
-
-                self.vx = next_up[3]
-                self.vy = next_up[4]
-                self.vz = next_up[5]
-
-                self.stats[0] = next_up[6]
-                self.stats[0] = next_up[7]
-                
-
+    
             with rc.default_shader:
                 self.scene.draw()
 
@@ -203,6 +162,7 @@ class Animate_phone:
                                 x=10, y=window.height//2-window.height//3 -20*i,
                                 anchor_x='left', anchor_y='center')
                 label.draw()
+
             if self.end_game == True:
                 self.client_sock.close()
                 self.server_sock.close()
@@ -221,8 +181,45 @@ class Animate_phone:
         self.gui_thread.start()
 
         #Start the main thread to recieve data
-        self.read_from_client()
-        
+        '''
+        #Transmission data format
+        # "**,"+ System.currentTimeMillis()+","+this.is_falling()+","+Orientation[0]+","+Orientation[1]+","+Orientation[2]+","+vx+","+vy+","+vz+"\n";
+                                                                #total height
+        '''
+        while True:
+            data = str(self.client_sock.recv(1024).decode('utf-8'))
+            data= data.split(',')
+            print(data)
+            if len(data)== 9 and self.valid_data(data):
+                valid = False
+                state = 1
+                s1 = 'Fall Distance: tbd'
+                s0 = 'Fall Status: False'
+                save = False
+
+                if data[0]=="~~":
+                    s0 = ''.join(['Fall Status: ', str('true' in data[2])])
+                    valid = True
+                    state = 1
+
+                elif data[0] =="**":
+                    s0 = ''.join(['Fall Status: ', str('true' in data[2])])
+                    state =0
+
+                elif data[0]=="##":
+                    s1 ='Fall Distance: '+data[2]
+                    state = 2
+                    save =True
+                    valid = True
+
+                if valid:
+                    self.parse_save_data(data,state,s0,s1)
+                    if save:
+                        self.save_and_close_animation_doc()
+                    
+                    
+                time.sleep(0.016)
+    
       
         
 
