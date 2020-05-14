@@ -59,7 +59,8 @@ class Animate_phone:
         self.scene.bgColor = 138/255, 113/255, 145/255
 
         #schdules the update and user input functions to run
-        pyglet.clock.schedule(self.update,1.0/60.0)
+        pyglet.clock.schedule_interval(self.update, 1.0/60.0)
+        pyglet.clock.schedule_interval(self.get_recent_valid_data, 1.0/90.0)
         pyglet.clock.schedule(self.user_inputs)
 
         #used to display animation
@@ -122,7 +123,38 @@ class Animate_phone:
 
                 self.stats[0] = next_up[6]
                 self.stats[1] = next_up[7]
-                
+    
+
+    def get_recent_valid_data(self,dt):
+
+        data = str(self.client_sock.recv(1024).decode('utf-8'))
+        data= data.split(',')
+        if len(data)== 9 and self.valid_data(data):
+            valid = False
+            state = 1
+            s1 = 'Fall Distance: tbd'
+            s0 = 'Fall Status: False'
+            save = False
+
+            if data[0]=="~~":
+                s0 = ''.join(['Fall Status: ', str('true' in data[2])])
+                valid = True
+                state = 1
+
+            elif data[0] =="**":
+                s0 = ''.join(['Fall Status: ', str('true' in data[2])])
+                state =0
+
+            elif data[0]=="##":
+                s1 ='Fall Distance: '+data[2]
+                state = 2
+                save =True
+                valid = True
+
+            if valid:
+                self.parse_save_data(data,state,s0,s1)
+                if save:
+                    self.save_and_close_animation_doc()
         
     # Constantly checks for new user inputs and processes it accordingly
     def user_inputs(self,dt):
@@ -138,43 +170,9 @@ class Animate_phone:
 
     def draw_display(self):
           # pyglet draw loop
-        
-        def get_recent_valid_data():
-            made_it= False
-            while not(made_it):
-                data = str(self.client_sock.recv(1024).decode('utf-8'))
-                data= data.split(',')
-                if len(data)== 9 and self.valid_data(data):
-                    valid = False
-                    state = 1
-                    s1 = 'Fall Distance: tbd'
-                    s0 = 'Fall Status: False'
-                    save = False
-
-                    if data[0]=="~~":
-                        s0 = ''.join(['Fall Status: ', str('true' in data[2])])
-                        valid = True
-                        state = 1
-
-                    elif data[0] =="**":
-                        s0 = ''.join(['Fall Status: ', str('true' in data[2])])
-                        state =0
-
-                    elif data[0]=="##":
-                        s1 ='Fall Distance: '+data[2]
-                        state = 2
-                        save =True
-                        valid = True
-
-                    if valid:
-                        self.parse_save_data(data,state,s0,s1)
-                        if save:
-                            self.save_and_close_animation_doc()
-        
         @window.event
         def on_draw():
 
-            get_recent_valid_data()
             self.torus2.rotation.x = 90
             self.torus.rotation.y = self.roll
             self.torus2.rotation.y = self.pitch
@@ -203,10 +201,10 @@ class Animate_phone:
 
     def run(self):
 
-        #Creating the GUI recieve thread
+        # #Creating the GUI recieve thread
         # self.gui_thread = threading.Thread(target=self.draw_display)
 
-        # #starts GUI listener
+        # # #starts GUI listener
         # self.gui_thread.start()
 
         #Start the main thread to recieve data
