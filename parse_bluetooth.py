@@ -121,11 +121,12 @@ class Animate_phone:
     
     def run(self,debug=False):
         
-        self.plt = Plotter(''.join(self.stats))
+        
 
         self.bluetoth_thread = threading.Thread(target=self.get_recent_valid_data)
         self.bluetoth_thread.start()
 
+        self.plt = Plotter(''.join(self.stats))
         self.plt.start()
 
 
@@ -133,8 +134,7 @@ class Animate_phone:
             self.iter_barrier.wait()
             self.plt.update_label("".join(self.stats))
 
-            print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n')
-            #self.stats[0],'\n',self.stats[1])
+            print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
 
             self.iter_barrier.wait()
         
