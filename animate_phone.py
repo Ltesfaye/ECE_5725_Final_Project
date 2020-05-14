@@ -11,7 +11,7 @@ import bluetooth
 
 
 # Create window and OpenGL context 
-window = pyglet.window.Window(fullscreen=True,visable=False)
+window = pyglet.window.Window(fullscreen=True,visible=False)
 
 # window.set_size(int(700), int(380))
 
