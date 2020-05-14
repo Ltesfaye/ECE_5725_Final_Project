@@ -126,8 +126,8 @@ class Animate_phone:
         self.bluetoth_thread = threading.Thread(target=self.get_recent_valid_data)
         self.bluetoth_thread.start()
 
-        self.plt = Plotter(''.join(self.stats))
-        self.plt.start()
+        plot = Plotter(''.join(self.stats))
+        plot.start()
 
 
         while True:
@@ -135,7 +135,7 @@ class Animate_phone:
             
 
             print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
-            self.plt.update_label(self.stats[0])
+            plot.update_label("HIIIIII")
 
             self.iter_barrier.wait()
         
