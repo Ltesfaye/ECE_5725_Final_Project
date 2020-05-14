@@ -11,8 +11,9 @@ import bluetooth
 
 
 # Create window and OpenGL context 
-window = pyglet.window.Window()
-window.set_size(int(700), int(380))
+window = pyglet.window.Window(fullscreen=True,visable=False)
+
+# window.set_size(int(700), int(380))
 
 
 class Animate_phone:
@@ -58,7 +59,7 @@ class Animate_phone:
         self.scene.bgColor = 138/255, 113/255, 145/255
 
         #schdules the update and user input functions to run
-        pyglet.clock.schedule(self.update)
+        pyglet.clock.schedule(self.update,1.0/60.0)
         pyglet.clock.schedule(self.user_inputs)
 
         #used to display animation
@@ -77,7 +78,6 @@ class Animate_phone:
             output.write(str(list(self.animation_data)))
         pass
     
-
     def parse_save_data(self,data,state,s0,s1):
         time = float(data[1])
         temp = data[3:]
@@ -101,10 +101,7 @@ class Animate_phone:
     def valid_data(self,data):
             return all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:])
 
-
-            
-                    
-                
+      
     # Constantly and updating background color
     def update(self,dt):
         if  'false' in self.stats[0].lower():
@@ -124,11 +121,9 @@ class Animate_phone:
                 self.vz = next_up[5]
 
                 self.stats[0] = next_up[6]
-                self.stats[0] = next_up[7]
+                self.stats[1] = next_up[7]
                 
         
-    
-
     # Constantly checks for new user inputs and processes it accordingly
     def user_inputs(self,dt):
         if self.keys[key.R]:
@@ -186,7 +181,9 @@ class Animate_phone:
         # "**,"+ System.currentTimeMillis()+","+this.is_falling()+","+Orientation[0]+","+Orientation[1]+","+Orientation[2]+","+vx+","+vy+","+vz+"\n";
                                                                 #total height
         '''
+        visable = False
         while True:
+            
             data = str(self.client_sock.recv(1024).decode('utf-8'))
             data= data.split(',')
             print(data)
@@ -216,9 +213,10 @@ class Animate_phone:
                     self.parse_save_data(data,state,s0,s1)
                     if save:
                         self.save_and_close_animation_doc()
-                    
-                    
-                time.sleep(0.016)
+    
+                    if visable == False:
+                        window.set_visible()
+                        visable = True
     
       
         
