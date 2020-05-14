@@ -39,8 +39,6 @@ class Animate_phone:
 
         #animation
         self.animation_data = []
-        
-
         self.iter_barrier = threading.Barrier(2)
 
 
