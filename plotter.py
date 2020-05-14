@@ -105,7 +105,7 @@ class Plotter:
             plt.pause(0.5)
     
     def start(self):
-        self.add_3d_point((0,0,0))
+        self.add_3d_point((0,0,0),pause=False)
 
     def run_test(self):
         
