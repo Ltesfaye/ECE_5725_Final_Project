@@ -110,8 +110,8 @@ class Animate_phone:
                     if save:
                         self.save_and_close_animation_doc()
 
-                    self.iter_barrier.wait()
-                    self.iter_barrier.wait()
+                    # self.iter_barrier.wait()
+                    # self.iter_barrier.wait()
     
     def run(self):
         self.bluetoth_thread = threading.Thread(target=self.get_recent_valid_data)
@@ -119,16 +119,18 @@ class Animate_phone:
         start = time.time()
         counter = 0
         while True:
-            self.iter_barrier.wait()
-            counter +=1
-            if counter ==10:
-                print("Time for 10 data",time.time()-start)
-            print(counter)
+            # self.iter_barrier.wait()
+            
 
-            # if not(self.display_data.empty()):
+            if not(self.display_data.empty()):
+                _=self.display_data.get()
+                counter +=1
+                if counter ==10:
+                    print("Time for 10 data",time.time()-start)
+                print(counter)
             #     print(self.display_data.get())
 
-            self.iter_barrier.wait()
+            # self.iter_barrier.wait()
         
         
 
