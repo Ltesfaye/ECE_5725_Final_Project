@@ -18,7 +18,7 @@ class Animate_phone:
         self.server_sock = server_sock
 
         #Default stats label to be displayed
-        self.stats = ['Fall Status: False','Fall Distance: Nan']
+        self.stats = ['Fall Status: False','Fall Distance: Nan',"Pitch :0","Roll:0"]
 
         #setting up the defaults
         self.azimuth = 0
@@ -149,8 +149,9 @@ class Animate_phone:
 
         while True:
             self.iter_barrier.wait()
-        
-            print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
+            self.stats[2] = "Pitch : "+self.pitch
+            self.stats[3] = "Roll : "+self.roll
+            # print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
             plot.update_label(self.display_stats())
             print(self.begin_animation)
             if self.begin_animation:

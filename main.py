@@ -1,4 +1,6 @@
 import bluetooth
+import signal
+import sys
 
 #Setting up the debug flag
 debug = False
@@ -29,6 +31,11 @@ else:
     display.run()
 
 
+def signal_handler(sig, frame):
+    print('You pressed Ctrl+C!')
+    client_sock.close()
+    server_sock.close()
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
     
-client_sock.close()
-server_sock.close()
