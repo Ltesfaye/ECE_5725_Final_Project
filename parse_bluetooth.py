@@ -68,19 +68,20 @@ class Animate_phone:
         self.stats[0] = s0
         self.stats[1] = s1
 
-        if state==0:
-            self.inital_velocity = temp[3:]
-            self.animation_data.clear()
-            self.start_time = recorded_time
-            self.animation_data.append((recorded_time,temp[:3]))
-            
-        elif state==1:
-            self.animation_data.append((recorded_time,temp[:3]))
-        else:
-            #begin animation
-            self.begin_animation = True
-            self.end_time = recorded_time
-            self.animation_data.append((recorded_time,temp[:3]))
+        if not(self.begin_animation):
+            if state==0:
+                self.inital_velocity = temp[3:]
+                self.animation_data.clear()
+                self.start_time = recorded_time
+                self.animation_data.append((recorded_time,temp[:3]))
+                
+            elif state==1:
+                self.animation_data.append((recorded_time,temp[:3]))
+            else:
+                #begin animation
+                self.begin_animation = True
+                self.end_time = recorded_time
+                self.animation_data.append((recorded_time,temp[:3]))
         
     def valid_data(self,data):
             return all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:]) and not(re.match(r'^-?\d+(?:\.\d+)?$', data[1]) is None)
