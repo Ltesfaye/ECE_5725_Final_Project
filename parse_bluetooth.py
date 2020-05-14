@@ -32,6 +32,7 @@ class Animate_phone:
 
         #exit game condition
         self.animation_data = deque()
+        self.display_data = Queue()
         
 
         self.iter_barrier = threading.Barrier(2)
@@ -57,6 +58,7 @@ class Animate_phone:
         self.vy = temp[4]
         self.vz = temp[5]
 
+        self.display_data.put(temp+[s0,s1])
         self.stats[0] = s0
         self.stats[1] = s1
 
@@ -108,19 +110,20 @@ class Animate_phone:
                     if save:
                         self.save_and_close_animation_doc()
 
-                    self.iter_barrier.wait()
-                    self.iter_barrier.wait()
+                    # self.iter_barrier.wait()
+                    # self.iter_barrier.wait()
     
     def run(self):
         self.bluetoth_thread = threading.Thread(target=self.get_recent_valid_data)
         self.bluetoth_thread.start()
 
         while True:
-            self.iter_barrier.wait()
+            # self.iter_barrier.wait()
 
-            print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
+            if not(self.display_data.empty()):
+                print(self.display_data.get())
 
-            self.iter_barrier.wait()
+            # self.iter_barrier.wait()
         
         
 
