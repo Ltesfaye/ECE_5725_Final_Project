@@ -121,6 +121,12 @@ class Animate_phone:
                     self.iter_barrier.wait()
                     self.iter_barrier.wait()
     
+    def display_stats(self):
+        display =""
+        for i in self.stats:
+            display +=i
+            display +="\n"
+    
     def run(self,debug=False):
         
         
@@ -128,7 +134,7 @@ class Animate_phone:
         self.bluetoth_thread = threading.Thread(target=self.get_recent_valid_data)
         self.bluetoth_thread.start()
 
-        plot = Plotter(''.join(self.stats))
+        plot = Plotter(''.join(self.display_stats))
         plot.start()
 
 
@@ -136,8 +142,17 @@ class Animate_phone:
             self.iter_barrier.wait()
             
 
-            print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
-            plot.update_label(self.stats[0])
+            # print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
+            plot.update_label(self.display_stats)
+            if self.begin_animation:
+                animation_data = self.animation_data.copy()
+                intial_valocity = self.inital_velocity.copy()
+                total_animation_time = self.end_time-self.start_time
+
+                print(intial_valocity,total_animation_time,len(animation_data))
+
+                self.begin_animation = False
+                break
 
             self.iter_barrier.wait()
         
