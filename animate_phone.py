@@ -60,7 +60,7 @@ class Animate_phone:
 
         #schdules the update and user input functions to run
         pyglet.clock.schedule_interval(self.update, 1.0/40.0)
-        pyglet.clock.schedule_interval(self.get_recent_valid_data, 1.0/60.0)
+        # pyglet.clock.schedule_interval(self.get_recent_valid_data, 1.0/60.0)
         pyglet.clock.schedule(self.user_inputs)
 
         #used to display animation
@@ -68,15 +68,16 @@ class Animate_phone:
 
         #exit game condition
         self.end_game=False
-        self.animation_data = deque()
+        self.animation_data = []
         self.display_data = Queue()
+        self.iter_barrier = threading.Barrier(2)
 
 
 
     def save_and_close_animation_doc(self):
         timestr = time.strftime("%Y%m%d-%H%M%S")
         with open(''.join([timestr,".txt"]), "w") as output:
-            output.write(str(list(self.animation_data)))
+            output.write(str(self.animation_data))
         pass
     
     def parse_save_data(self,data,state,s0,s1):
@@ -99,7 +100,7 @@ class Animate_phone:
 
         if state==0:
             self.inital_velocity = temp[3:]
-            self.animation_data.clear()
+            self.animation_data=[]
             self.animation_data.append((time,temp[:3]))
             
         elif state==1:
@@ -112,7 +113,6 @@ class Animate_phone:
     def valid_data(self,data):
             return all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:]) and not(re.match(r'^-?\d+(?:\.\d+)?$', data[1]) is None)
 
-      
     # Constantly and updating background color
     def update(self,dt):
         if  'false' in self.stats[0].lower():
@@ -120,21 +120,6 @@ class Animate_phone:
         else:
                 self.scene.bgColor = 12/255, 100/255, 12/255
         
-        # if not(self.display_data.empty()):
-        #         next_up = self.display_data.get()
-                
-        #         self.azimuth = next_up[0]
-        #         self.pitch = next_up[1]
-        #         self.roll = next_up[2]
-
-        #         self.vx = next_up[3]
-        #         self.vy = next_up[4]
-        #         self.vz = next_up[5]
-
-        #         self.stats[0] = next_up[6]
-        #         self.stats[1] = next_up[7]
-    
-
     def get_recent_valid_data(self,dt):
 
         data = str(self.client_sock.recv(1024).decode('utf-8'))

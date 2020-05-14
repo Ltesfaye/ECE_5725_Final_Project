@@ -24,7 +24,7 @@ if debug:
             break
 else:
     print("____Starting Display____")
-    from animate_phone import Animate_phone
+    from parse_bluetooth import Animate_phone
     display = Animate_phone(client_sock,server_sock)
     display.run()
 
