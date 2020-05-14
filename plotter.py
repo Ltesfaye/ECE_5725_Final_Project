@@ -123,10 +123,7 @@ class Plotter:
         self.add_3d_point((8,8, 8),block=True)
 
 
-plot = Plotter('HI')
-plot.start()
-while True:
-    pass
+# plot = Plotter('HI')
 # plot.run()
       
  
