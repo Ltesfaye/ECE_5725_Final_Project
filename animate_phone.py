@@ -59,7 +59,7 @@ class Animate_phone:
         self.scene.bgColor = 138/255, 113/255, 145/255
 
         #schdules the update and user input functions to run
-        pyglet.clock.schedule_interval(self.update, 1.0/60.0)
+        pyglet.clock.schedule_interval(self.update, 1.0/40.0)
         pyglet.clock.schedule_interval(self.get_recent_valid_data, 1.0/60.0)
         pyglet.clock.schedule(self.user_inputs)
 
