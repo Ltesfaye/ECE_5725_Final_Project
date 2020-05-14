@@ -81,7 +81,7 @@ class Plotter:
         self.label=  plt.gcf().text(0.02, 0.5, new_label, fontsize=9)
         plt.draw()
         plt.show(block=False)
-        plt.pause(0.05)
+        plt.pause(0.005)
 
     def add_pitch_value(self,p,block=False):
         self.hl_pitch.set_xdata(np.append(self.hl_pitch.get_xdata(), self.pitch_counter))
@@ -103,7 +103,7 @@ class Plotter:
         self.update_3d_line(self.hl, p)
         plt.show(block=block)
         if pause:
-            plt.pause(0.05)
+            plt.pause(0.005)
     
     def start(self):
         self.add_3d_point((0,0,0))
