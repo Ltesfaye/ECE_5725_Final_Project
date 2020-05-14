@@ -119,10 +119,10 @@ class Animate_phone:
     def run(self,debug=False):
         
         self.bluetoth_thread = threading.Thread(target=self.get_recent_valid_data)
-        self.bluetoth_thread.start()
+        # self.bluetoth_thread.start()
 
        
-
+        start = time.time()
         while True:
             data = str(self.client_sock.recv(1024).decode('utf-8'))
             data= data.split(',')
@@ -165,9 +165,12 @@ class Animate_phone:
                     self.parse_save_data(data,state,s0,s1)
                     if save:
                         self.save_and_close_animation_doc()
+                    
+                    print("Killing it",time.time()-start)
+                    start = time.time()
 
-                    self.iter_barrier.wait()
-                    self.iter_barrier.wait()
+                    # self.iter_barrier.wait()
+                    # self.iter_barrier.wait()
     
 
 
