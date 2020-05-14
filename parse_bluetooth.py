@@ -115,7 +115,7 @@ class Animate_phone:
                     save =True
                     valid = True
                 
-                print(data[0],valid,"HI")
+                
 
                 if valid:
                     self.parse_save_data(data,state,s0,s1)
@@ -143,9 +143,7 @@ class Animate_phone:
 
         while True:
             self.iter_barrier.wait()
-            print("BYE")
-            
-
+        
             # print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
             plot.update_label(self.display_stats())
             # print(self.begin_animation)
