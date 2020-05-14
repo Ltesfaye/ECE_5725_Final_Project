@@ -2,6 +2,10 @@ import bluetooth
 import signal
 import sys
 
+
+
+
+
 #Setting up the debug flag
 debug = False
 
@@ -16,6 +20,16 @@ server_sock.listen(1)
 client_sock,address = server_sock.accept()
 
 print ("Accepted connection from", address)
+
+#Signal Handler for not safe closing
+def signal_handler(sig, frame):
+    print('You pressed Ctrl+C!')
+    client_sock.close()
+    server_sock.close()
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+
 if debug:
     while True:
         data = client_sock.recv(1024)
@@ -31,11 +45,4 @@ else:
     display.run()
 
 
-def signal_handler(sig, frame):
-    print('You pressed Ctrl+C!')
-    client_sock.close()
-    server_sock.close()
-    sys.exit(0)
-
-signal.signal(signal.SIGINT, signal_handler)
     
