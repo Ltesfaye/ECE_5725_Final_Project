@@ -132,9 +132,10 @@ class Animate_phone:
 
         while True:
             self.iter_barrier.wait()
-            self.plt.update_label("".join(self.stats))
+            
 
             print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
+            self.plt.update_label("".join(self.stats))
 
             self.iter_barrier.wait()
         
