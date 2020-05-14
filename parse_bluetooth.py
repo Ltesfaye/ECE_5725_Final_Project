@@ -150,16 +150,16 @@ class Animate_phone:
         while True:
             self.iter_barrier.wait()
         
-            # print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
+            print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
             plot.update_label(self.display_stats())
-            # print(self.begin_animation)
+            print(self.begin_animation)
             if self.begin_animation:
                 
                 animation_data = self.animation_data.copy()
                 intial_valocity = self.inital_velocity.copy()
                 total_animation_time = self.end_time-self.start_time
                 print(intial_valocity,total_animation_time,len(animation_data))
-                # self.begin_animation = False
+                self.begin_animation = False
                
             self.iter_barrier.wait()
         
