@@ -85,6 +85,9 @@ class Animate_phone:
 
     
     def get_recent_valid_data(self):
+        plot = Plotter(self.display_stats())
+        plot.start()
+        
         while True:
             self.iter_barrier.wait()
             self.stats[2] = "Pitch : "+str(self.pitch)
@@ -105,7 +108,7 @@ class Animate_phone:
                 self.begin_animation = False
                
             self.iter_barrier.wait()
-            
+
        ''' while True:
             data = str(self.client_sock.recv(1024).decode('utf-8'))
             data= data.split(',')
@@ -164,8 +167,7 @@ class Animate_phone:
         self.bluetoth_thread = threading.Thread(target=self.get_recent_valid_data)
         self.bluetoth_thread.start()
 
-        plot = Plotter(self.display_stats())
-        plot.start()
+       
 
         while True:
             data = str(self.client_sock.recv(1024).decode('utf-8'))
