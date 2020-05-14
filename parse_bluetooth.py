@@ -37,8 +37,8 @@ class Animate_phone:
         #used to display animation
         self.begin_animation = False
 
-        #exit game condition
-        self.animation_data = deque()
+        #animation
+        self.animation_data = []
         
 
         self.iter_barrier = threading.Barrier(2)
@@ -49,7 +49,7 @@ class Animate_phone:
         timestr = time.strftime("%Y%m%d-%H%M%S")
         file_name = os.path.join("fall_records",''.join([timestr,".txt"]))
         with open(file_name, "w") as output:
-            output.write(str(list(self.animation_data)))
+            output.write(str(self.animation_data))
         pass
     
     def parse_save_data(self,data,state,s0,s1):
@@ -90,7 +90,7 @@ class Animate_phone:
         while True:
             data = str(self.client_sock.recv(1024).decode('utf-8'))
             data= data.split(',')
-            print(data[0])
+            # print(data[0])
             
             if len(data)== 9 and self.valid_data(data):
                 valid = False
@@ -132,8 +132,6 @@ class Animate_phone:
     
     def run(self,debug=False):
         
-        
-
         self.bluetoth_thread = threading.Thread(target=self.get_recent_valid_data)
         self.bluetoth_thread.start()
 
@@ -147,7 +145,7 @@ class Animate_phone:
 
             # print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
             plot.update_label(self.display_stats())
-            print(self.begin_animation)
+            # print(self.begin_animation)
             if self.begin_animation:
                 
                 animation_data = self.animation_data.copy()
