@@ -5,6 +5,7 @@ from collections import deque
 from queue import Queue
 import threading
 import bluetooth
+from plotter import Plotter
 
 
 class Animate_phone:
@@ -27,6 +28,11 @@ class Animate_phone:
         self.vy = 0
         self.vz = 0
 
+        #used to compute and display animation
+        self.inital_velocity = [0,0,0]
+        self.start_time = 0
+        self.end_time=0
+
         #used to display animation
         self.begin_animation = False
 
@@ -45,7 +51,7 @@ class Animate_phone:
         pass
     
     def parse_save_data(self,data,state,s0,s1):
-        time = float(data[1])
+        recorded_time = float(data[1])
         temp = data[3:]
         temp = [float(i) for i in temp] 
 
@@ -63,14 +69,16 @@ class Animate_phone:
         if state==0:
             self.inital_velocity = temp[3:]
             self.animation_data.clear()
-            self.animation_data.append((time,temp[:3]))
+            self.start_time = recorded_time
+            self.animation_data.append((recorded_time,temp[:3]))
             
         elif state==1:
-            self.animation_data.append((time,temp[:3]))
+            self.animation_data.append((recorded_time,temp[:3]))
         else:
             #begin animation
             self.begin_animation = True
-            self.animation_data.append((time,temp[:3]))
+            self.end_time = recorded_time
+            self.animation_data.append((recorded_time,temp[:3]))
         
     def valid_data(self,data):
             return all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:]) and not(re.match(r'^-?\d+(?:\.\d+)?$', data[1]) is None)
@@ -112,13 +120,21 @@ class Animate_phone:
                     self.iter_barrier.wait()
     
     def run(self,debug=False):
+        
+        self.plt = Plotter(''.join(self.stats))
+
         self.bluetoth_thread = threading.Thread(target=self.get_recent_valid_data)
         self.bluetoth_thread.start()
 
+        self.plt.start()
+
+
         while True:
             self.iter_barrier.wait()
+            self.plt.update_label("".join(self.stats))
 
-            print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
+            print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n')
+            #self.stats[0],'\n',self.stats[1])
 
             self.iter_barrier.wait()
         
