@@ -78,7 +78,7 @@ class Plotter:
 
     def update_label(self,new_label):
         self.label.set_visible(False)
-        self.label=  plt.gcf().text(0.02, 0.5, new_label, fontsize=14)
+        self.label=  plt.gcf().text(0.02, 0.5, new_label, fontsize=9)
         plt.draw()
         plt.show(block=False)
 
