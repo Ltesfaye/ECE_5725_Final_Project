@@ -14,15 +14,16 @@ class Plotter:
         self.pitch_figure = self.map.add_subplot(2, 2, 2)
         self.roll_figure = self.map.add_subplot(2, 2, 4)
 
-        self.label = plt.gcf().text(0.02, 0.5, labels, fontsize=14)
+        #display label
+        self.label = plt.gcf().text(0.02, 0.5, labels, fontsize=9)
 
         #plot labels
         self.pitch_figure.set_title('Pitch over time')
         self.roll_figure.set_title("Roll over time")
         self.map.suptitle('Visualizing phone fall')
       
-  
 
+        #Axis values for the plotter
         self.hl, = self.map_ax.plot3D([0], [0], [0])
         self.hl_pitch, = self.pitch_figure.plot([],[])
         self.hl_roll,  = self.roll_figure.plot([],[])
@@ -43,7 +44,6 @@ class Plotter:
         self.pitch_figure.set_ylim([-360,360])
 
        
-        
     
     def update_3d_ranges(self,new_data):
         self.x_range = [min(self.x_range[0],new_data[0]), max(self.x_range[1],new_data[0])]
@@ -121,14 +121,12 @@ class Plotter:
         self.update_label("WHAT>>>>")
         self.add_3d_point((-5,35,- 5))
 
-     
-
         
         self.add_3d_point((8,8, 8),block=True)
 
 
 # plot = Plotter('HI')
-# plot.run()
+# plot.run_test()
       
  
  

@@ -1,4 +1,5 @@
 import re
+import os
 import time
 import math
 from collections import deque
@@ -46,7 +47,8 @@ class Animate_phone:
 
     def save_and_close_animation_doc(self):
         timestr = time.strftime("%Y%m%d-%H%M%S")
-        with open(''.join([timestr,".txt"]), "w") as output:
+        file_name = os.path.join("output",''.join([timestr,".txt"]))
+        with open(file_name, "w") as output:
             output.write(str(list(self.animation_data)))
         pass
     
