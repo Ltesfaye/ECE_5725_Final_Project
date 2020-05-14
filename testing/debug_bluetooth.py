@@ -1,4 +1,5 @@
 import bluetooth
+import time
 
 
 server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
@@ -10,12 +11,15 @@ server_sock.listen(1)
 client_sock,address = server_sock.accept()
 
 print ("Accepted connection from", address)
-
+start = time.time()
 while True:
    
     data = client_sock.recv(1024)
 
     print ("received [%s]" %data)
+
+    print("Killing it",time.time()-start)
+    start = time.time()
 
     if (data=="e"):
         print("Exit")
