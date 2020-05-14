@@ -118,7 +118,7 @@ class Animate_phone:
     
     def run(self,debug=False):
         
-        self.bluetoth_thread = threading.Thread(target=self.get_recent_valid_data)
+        # self.bluetoth_thread = threading.Thread(target=self.get_recent_valid_data)
         # self.bluetoth_thread.start()
 
        
