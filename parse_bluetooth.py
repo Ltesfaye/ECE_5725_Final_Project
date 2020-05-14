@@ -90,7 +90,7 @@ class Animate_phone:
         while True:
             data = str(self.client_sock.recv(1024).decode('utf-8'))
             data= data.split(',')
-            # print(data[0])
+            print(data[0],"HI")
             
             if len(data)== 9 and self.valid_data(data):
                 valid = False
@@ -107,6 +107,7 @@ class Animate_phone:
                 elif data[0] =="**":
                     s0 = ''.join(['Fall Status: ', str('true' in data[2])])
                     state =0
+                    valid = True
 
                 elif data[0]=="##":
                     s1 ='Fall Distance: '+data[2]
@@ -141,6 +142,7 @@ class Animate_phone:
 
         while True:
             self.iter_barrier.wait()
+            print("BYE")
             
 
             # print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
