@@ -134,7 +134,7 @@ class Animate_phone:
         self.bluetoth_thread = threading.Thread(target=self.get_recent_valid_data)
         self.bluetoth_thread.start()
 
-        plot = Plotter(''.join(self.display_stats))
+        plot = Plotter(self.display_stats)
         plot.start()
 
 
@@ -148,9 +148,7 @@ class Animate_phone:
                 animation_data = self.animation_data.copy()
                 intial_valocity = self.inital_velocity.copy()
                 total_animation_time = self.end_time-self.start_time
-
                 print(intial_valocity,total_animation_time,len(animation_data))
-
                 self.begin_animation = False
                 break
 
