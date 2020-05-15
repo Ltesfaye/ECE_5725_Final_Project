@@ -83,30 +83,27 @@ class Animate_phone:
     def valid_data(self,data):
             return all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:]) and not(re.match(r'^-?\d+(?:\.\d+)?$', data[1]) is None)
 
-    def get_recent_valid_data(self):
-        plot = Plotter(self.display_stats())
-        plot.start()
+    def update_display(self):
 
-        while True:
-            self.iter_barrier.wait()
-            self.stats[2] = "Pitch : "+str(self.pitch)
-            self.stats[3] = "Roll : "+ str(self.roll)
+        
+        self.stats[2] = "Pitch : "+str(self.pitch)
+        self.stats[3] = "Roll : "+ str(self.roll)
 
-            # print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
-            # print(self.begin_animation)
+        print(self.azimuth,self.pitch,self.roll,self.vx,self.vy,'\n',self.stats[0],'\n',self.stats[1])
+        print(self.begin_animation)
 
 
-            plot.update_label(self.display_stats())
+        self.plot.update_label(self.display_stats())
+        
+        if self.begin_animation:
             
-            if self.begin_animation:
-                
-                animation_data = self.animation_data.copy()
-                intial_valocity = self.inital_velocity.copy()
-                total_animation_time = self.end_time-self.start_time
-                print(intial_valocity,total_animation_time,len(animation_data))
-                self.begin_animation = False
-               
-            self.iter_barrier.wait()
+            animation_data = self.animation_data.copy()
+            intial_valocity = self.inital_velocity.copy()
+            total_animation_time = self.end_time-self.start_time
+            print(intial_valocity,total_animation_time,len(animation_data))
+            self.begin_animation = False
+            
+        
 
     def display_stats(self):
         display =""
@@ -115,10 +112,16 @@ class Animate_phone:
             display +="\n"
         return display
     
-    def run(self,debug=False):
+    def start_plotter(self):
+        self.plot = Plotter(self.display_stats())
+        self.plot.start()
 
+    def run(self,debug=False):
+        print("____Starting Display____")
+        self.start_plotter()
         start = time.time()
         while True:
+            
             data = str(self.client_sock.recv(1024).decode('utf-8'))
             data= data.split(',')
             
@@ -158,6 +161,7 @@ class Animate_phone:
 
                 if valid:
                     self.parse_save_data(data,state,s0,s1)
+                    self.update_display()
                     if save:
                         self.save_and_close_animation_doc()
                     if debug:
@@ -166,60 +170,7 @@ class Animate_phone:
 
 
 
-# def start():
-    
-#     import signal
-#     import sys
-#     import time
 
-
-
-
-#     #Setting up the debug flag
-#     debug = False
-
-#     #setting up bluetooth server socket
-#     server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-
-#     #waiting for a connection on port1
-#     port=1
-#     server_sock.bind(("",port))
-#     server_sock.listen(1)
-
-#     client_sock,address = server_sock.accept()
-#     print ("Resetting connection from", address)
-
-#     client_sock.close()
-#     server_sock.close()
-
-#     time.sleep(1)
-
-
-#     #setting up bluetooth server socket
-#     server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-
-#     #waiting for a connection on port1
-#     port=1
-#     server_sock.bind(("",port))
-#     server_sock.listen(1)
-#     client_sock,address = server_sock.accept()
-
-#     print ("Accepted connection from", address)
-
-
-
-#     if debug:
-#         while True:
-#             data = client_sock.recv(1024)
-#             print ("received [%s]" %data)
-
-#             if (data=="e"):
-#                 print("Exit")
-#                 break
-#     else:
-#         print("____Starting Display____")
-#         display = Animate_phone(client_sock,server_sock)
-#         display.run()
 
 
     
