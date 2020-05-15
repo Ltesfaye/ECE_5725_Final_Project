@@ -60,6 +60,7 @@ display_thread = threading.Thread(target=run,args=(e,))
 display_thread.start()
 
 
+
 def validate_data(data):
     if data[0] in ['~~','##','**']:
         for d in range(3,8):
@@ -82,7 +83,7 @@ animation_data=[]
 currently_falling=False 
 
 updated_data.clear()
-while True:
+while True and threading.current_thread() is threading.main_thread():
         try:
             # st = time.time()
             data = updated_data.popleft()
