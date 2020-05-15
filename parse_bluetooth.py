@@ -1,6 +1,5 @@
 import re
 import os
-import time
 import math
 from collections import deque
 from queue import Queue
@@ -119,7 +118,6 @@ class Animate_phone:
     def run(self,debug=False):
         print("____Starting Display____")
         self.start_plotter()
-        start = time.time()
         while True:
             
             data = str(self.client_sock.recv(1024).decode('utf-8'))
@@ -164,9 +162,7 @@ class Animate_phone:
                     self.update_display()
                     if save:
                         self.save_and_close_animation_doc()
-                    if debug:
-                        print("Killing it",time.time()-start)
-                        start = time.time()
+
 
 
 
