@@ -32,9 +32,9 @@ class Plotter:
         self.pitch_counter=  0
         self.roll_counter= 0
 
-        self.x_range = [0.0,10.0]
-        self.y_range = [0.0,10.0]
-        self.z_range = [0.0,10.0]
+        self.x_range = [0.0,0.01]
+        self.y_range = [0.0,0.01]
+        self.z_range = [0.0,0.01]
         
         self.map_ax.set_xlim3d(self.x_range)
         self.map_ax.set_ylim3d(self.y_range)

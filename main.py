@@ -45,7 +45,7 @@ def run(event):
     while True:
         event_set = event.wait(0.0001)
         if event_set:
-            s.close
+            s.close()
             break
         pass
 
