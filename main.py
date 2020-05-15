@@ -4,7 +4,27 @@ import re #used to validate states
 from collections import deque
 import threading
 
+def cleanser():
+    import bluetooth
 
+    #Setting up the debug flag
+    debug = False
+
+    #setting up bluetooth server socket
+    server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+
+    #waiting for a connection on port1
+    port=1
+    server_sock.bind(("",port))
+    server_sock.listen(1)
+
+    client_sock,address = server_sock.accept()
+    print ("Resetting connection from", address)
+
+    client_sock.close()
+    server_sock.close()
+cleanser()
+cleanser()
 
 stats = ['Fall Status: False','Fall Distance: Nan',"Pitch: 0","Roll: 0",'Bluetooth Connected: False']
 update= False
