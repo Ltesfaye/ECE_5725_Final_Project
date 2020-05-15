@@ -34,9 +34,9 @@ s = BluetoothServer(data_received)#starts RFCOMM Server
 while True:
     if update:
         if s.client_connected():
-            stats[5] = 'Bluetooth Connected: True'
+            stats[4] = 'Bluetooth Connected: True'
         else:
-            stats[5] = 'Bluetooth Connected: False'
+            stats[4] = 'Bluetooth Connected: False'
 
         plot.update_label(display_stats(stats))
     
