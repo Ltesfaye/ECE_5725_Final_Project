@@ -9,11 +9,8 @@ validate_data = lambda data:all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) f
 update= False
 begin_animation = False
 
-plot = Plotter(display_stats(stats))
-plot.start()
-
 def data_received(data):
-    global update,begin_animation,stats
+    global begin_animation,stats
 
     stats[4] = 'Bluetooth Connected: True'
 
@@ -21,7 +18,6 @@ def data_received(data):
     print(data[1])
     if len(data)==9 and validate_data(data):
         
-        update=True
         if data[0] !="##":
             stats[0] =''.join(['Fall Status: ', str('true' in data[2])])
         else:
@@ -31,12 +27,14 @@ def data_received(data):
     
 
 s = BluetoothServer(data_received)#starts RFCOMM Server
+plot = Plotter(display_stats(stats))
+plot.start()
 
 
 
 while True:
-    print(stats[4])
-    plot.update_label(display_stats(stats))
+    # print(stats[4])
+    # plot.update_label(display_stats(stats))
     
     pass
 
