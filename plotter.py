@@ -111,12 +111,15 @@ class Plotter:
         self.update_3d_line(self.hl, p)
         plt.show(block=block)
         if pause:
-            plt.pause(0.005)
+            plt.pause(0.001)
     
     def start(self):
+        fig = plt.gcf()
+        fig.show()
+        fig.canvas.draw()
         plt.draw()
         plt.show(block=False)
-        plt.pause(0.005)
+        # plt.pause(0.001)
 
     def run_test(self):
         
