@@ -54,12 +54,10 @@ def run(event):
         pass
 
 
-
 e = threading.Event()
-display_thread = threading.Thread(target=run,args=(e,))
-display_thread.start()
-
-
+if threading.current_thread() is threading.main_thread():
+    display_thread = threading.Thread(target=run,args=(e,))
+    display_thread.start()
 
 def validate_data(data):
     if data[0] in ['~~','##','**']:
@@ -78,12 +76,15 @@ def validate_data(data):
     return False
 
 
+
+
 initial_velocity=[] 
 animation_data=[]
 currently_falling=False 
 
 updated_data.clear()
-while True and threading.current_thread() is threading.main_thread():
+done = False
+while not(done) :
         try:
             # st = time.time()
             data = updated_data.popleft()
@@ -168,7 +169,7 @@ while True and threading.current_thread() is threading.main_thread():
 
 
                 updated_data.clear() 
-                begin_animation = False
+                done = True
                 pass
 
             if update:
