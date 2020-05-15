@@ -1,36 +1,28 @@
 from parse_bluetooth import *
 from bluetooth import *
-import sys,signal
+
 
 port = 1
-
 server_sock=BluetoothSocket( RFCOMM )
 server_sock.bind(("",port))
 server_sock.listen(1)
 
 
 print("Waiting for connection on RFCOMM channel %d" % port)
-
 client_sock, client_info = server_sock.accept()
 print("Accepted connection from ", client_info)
 
 
-#Signal Handler for not safe closing
-def signal_handler(sig, frame):
-    print('You pressed Ctrl+C!')
-    client_sock.close()
-    server_sock.close()
-    sys.exit(0)
-
-signal.signal(signal.SIGINT, signal_handler)
-
 try:
+    stats = ['Fall Status: False','Fall Distance: Nan',"Pitch :0","Roll:0"]
+    display_stats = lambda l:'\n'.join(l)
+    plot = Plotter(display_stats(stats))
+    plot.start()
     while True:
-        parser_display = Animate_phone(client_sock)
-        parser_display.run(debug=True)
-        # data = client_sock.recv(1024)
-        # if len(data) == 9: 
-        #     print("received [%s]" % data)
+        data = str(client_sock.recv(1024).decode('utf-8'))
+        data= data.split(',')
+        if len(data) == 9: 
+            print("received [%s]" % data[0])
 except IOError:
     pass
 

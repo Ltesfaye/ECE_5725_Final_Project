@@ -42,6 +42,7 @@ class Plotter:
         
         self.roll_figure.set_ylim([-360,360])
         self.pitch_figure.set_ylim([-360,360])
+        plt.tight_layout()
 
        
     
