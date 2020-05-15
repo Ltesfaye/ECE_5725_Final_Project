@@ -107,8 +107,8 @@ class Plotter:
         if pause:
             plt.pause(0.005)
     
-    def start(self):
-        self.add_3d_point((0,0,0))
+    # def start(self):
+    #     self.add_3d_point((0,0,0))
 
     def run_test(self):
         
