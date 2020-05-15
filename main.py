@@ -31,7 +31,7 @@ display_thread.start()
 
 def validate_data(data):
     if data[0] in ['~~','##','**']:
-        for d in range(3,9):
+        for d in range(3,8):
             try:
                 data[d] = float(data[d])
             except:
@@ -56,7 +56,7 @@ while True:
             data = updated_data.popleft()
             stats[4] = 'Bluetooth Connected: True'
             data= data.split(',')
-            if len(data)==9 and validate_data(data):
+            if len(data)==8 and validate_data(data):
                 update = True
                 stats[2] = "Pitch : "+str(data[4])
                 stats[3] = "Roll : "+ str(data[5])
