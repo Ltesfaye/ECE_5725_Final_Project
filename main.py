@@ -52,9 +52,8 @@ def run(event):
 
 
 e = threading.Event()
-if threading.current_thread() is threading.main_thread():
-    display_thread = threading.Thread(target=run,args=(e,))
-    display_thread.start()
+display_thread = threading.Thread(target=run,args=(e,))
+display_thread.start()
 
 def validate_data(data):
     if data[0] in ['~~','##','**']:
@@ -112,6 +111,7 @@ while not(done) :
                     e.set() #stop bluetooth thread
             
             if begin_animation:
+                print(len(animation_data))
                 plot.update_label(display_stats(stats))
                 update=False
                 #clearing anything plotted
