@@ -168,7 +168,9 @@ while not(done) :
                 updated_data.clear() 
                 done = True
                 pass
-
+            
+            elif begin_animation:
+                break
             if update:
                 plot.update_label(display_stats(stats))
                 update=False
