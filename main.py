@@ -5,9 +5,16 @@ import re #used to validate states
 
 stats = ['Fall Status: False','Fall Distance: Nan',"Pitch: 0","Roll: 0",'Bluetooth Connected: False']
 display_stats = lambda l:'\n'.join(l)
-validate_data = lambda data:all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:]) and not(re.match(r'^-?\d+(?:\.\d+)?$', data[1]) is None)
 update= False
 begin_animation = False
+
+#validate_data = lambda data:all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:]) and not(re.match(r'^-?\d+(?:\.\d+)?$', data[1]) is None)
+
+def validate_data(data):
+    if data[0] in ['~~','##','**'] and True:
+        return True
+   
+    return False
 
 def data_received(data):
     global begin_animation,stats
@@ -15,7 +22,8 @@ def data_received(data):
     stats[4] = 'Bluetooth Connected: True'
 
     data= data.split(',')
-    if len(data)==9 and validate_data(data):
+    if len(data)==9:
+    # and validate_data(data):
         print(data[1])
         
         if data[0] !="##":
@@ -28,7 +36,7 @@ def data_received(data):
 
 s = BluetoothServer(data_received)#starts RFCOMM Server
 plot = Plotter(display_stats(stats))
-# plot.start()
+plot.start()
 
 
 
