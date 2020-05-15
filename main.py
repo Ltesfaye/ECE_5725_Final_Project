@@ -22,7 +22,7 @@ try:
         data = str(client_sock.recv(1024).decode('utf-8'))
         data= data.split(',')
         if len(data) == 9: 
-            print("received [%s]" % data[0])
+            print("received [%s]" % data[1])
 except IOError:
     pass
 

@@ -1,5 +1,4 @@
 from bluetooth import *
-from plotter import Plotter
 
 port = 1
 
