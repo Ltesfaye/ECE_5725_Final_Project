@@ -26,14 +26,15 @@ def validate_data(data):
     return False
 
 def data_received(data):
-    global begin_animation,stats
+    global update,begin_animation,stats
 
     stats[4] = 'Bluetooth Connected: True'
     
 
     data= data.split(',')
     if len(data)==9 and validate_data(data):
-        # print(data[1])
+        print(data[1])
+        update = True
         stats[2] = "Pitch : "+str(data[4])
         stats[3] = "Roll : "+ str(data[5])
         if data[0] !="##":
@@ -52,8 +53,8 @@ plot.start()
 
 
 while True:
-    
-    plot.update_label(display_stats(stats))
+    if update:
+        plot.update_label(display_stats(stats))
     
     pass
 
