@@ -3,7 +3,6 @@ from bluedot.btcomm import BluetoothServer
 import re #used to validate states
 from collections import deque
 import threading
-from multiprocessing import Process
 import time
 import numpy as np
 
@@ -39,26 +38,25 @@ plot.start()
 
 def run(event):
     should_kill_thread=False
+    def when_client_leaves():
+        should_kill_thread= True
     def data_received(data):	  
         updated_data.append(data) # adds data to the queue and leaves	  
 
 
     s = BluetoothServer(data_received)#starts RFCOMM Server	
-    s = BluetoothServer(data_received)
-    #, when_client_disconnects=when_client_leaves)#starts RFCOMM Server
+    s = BluetoothServer(data_received, when_client_disconnects=when_client_leaves)#starts RFCOMM Server
 
 
     while True:	   
         event_set = event.wait(0.00001)
-        if event_set: 
-            #or should_kill_thread:
+        if event_set or should_kill_thread:
             s.stop()
             break
         pass
 
 e = threading.Event()
 display_thread = threading.Thread(target=run,args=(e,))
-# display_thread = Process(target=run, args=(e,))
 display_thread.start()
 
 def validate_data(data):
@@ -183,7 +181,7 @@ while not(done) :
                 update=False
 
         except:
-            # print("~~~~NO DATA~~~~")
+            print("~~~~NO DATA~~~~")
             pass
 
 
