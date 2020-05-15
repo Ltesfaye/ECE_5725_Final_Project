@@ -1,4 +1,3 @@
-from parse_bluetooth import *
 from bluetooth import *
 
 
