@@ -19,7 +19,7 @@ def validate_data(data):
 def data_received(data):
     global begin_animation,stats
 
-    # stats[4] = 'Bluetooth Connected: True'
+    stats[4] = 'Bluetooth Connected: True'
     
 
     data= data.split(',')
@@ -43,8 +43,8 @@ plot.start()
 
 
 while True:
-    # print(stats[4])
-    # plot.update_label(display_stats(stats))
+    
+    plot.update_label(display_stats(stats))
     
     pass
 
