@@ -113,6 +113,11 @@ while True:
                     e.set() #stop bluetooth thread
             
             if begin_animation:
+                plot.update_label(display_stats(stats))
+                update=False
+                #clearing anything plotted
+                plot.reset_pitch_roll_graph()
+
                 animation_data.reverse()
                 Dtime, orientation = map(list,zip(*animation_data))
                 start_delta_t = Dtime[-1]

@@ -80,9 +80,22 @@ class Plotter:
         self.hl_roll.set_ydata([])
         self.roll_counter=0
     
-    def reset_pitch_roll(self):
+    def reset_graph(self):
+        self.hl.set_xdata([])
+        self.hl.set_ydata([])
+        self.hl.set_3d_properties([])
+
+    
+    def reset_pitch_roll_graph(self):
         self.reset_pitch()
         self.reset_roll()
+        self.x_range = [0.0,0.01]
+        self.y_range = [0.0,0.01]
+        self.z_range = [0.0,0.01]
+        
+        self.map_ax.set_xlim3d(self.x_range)
+        self.map_ax.set_ylim3d(self.y_range)
+        self.map_ax.set_zlim3d(self.z_range)
 
     def update_label(self,new_label,initial=False):
         self.label.set_visible(False)
