@@ -108,10 +108,10 @@ while not(done) :
                     stats[1] ='Fall Distance: '+data[2]
                     currently_falling = False
                     begin_animation = True
-                    e.set() #stop bluetooth thread
+                    
             
             if begin_animation:
-                print(threading.active_count())
+                
                 plot.update_label(display_stats(stats))
                 update=False
                 #clearing anything plotted
