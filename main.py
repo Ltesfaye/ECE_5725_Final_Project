@@ -4,6 +4,7 @@ import re #used to validate states
 from collections import deque
 import threading
 import time
+import numpy as np
 
 def cleanser():
     import bluetooth
@@ -72,15 +73,14 @@ def validate_data(data):
     return False
 
 
-
-    
-initial_velocity = []  
+initial_velocity=[] 
+animation_data=[]
 currently_falling=False 
-Fall_initial = [0,0,0]
+
 updated_data.clear()
 while True:
         try:
-            st = time.time()
+            # st = time.time()
             data = updated_data.popleft()
             stats[4] = 'B-Paired: True'
             data= data.split(',')
@@ -92,8 +92,16 @@ while True:
                     stats[0] =''.join(['Fall Status: ', str('true' in data[2])])
 
                     if currently_falling == False and 'true' in data[2]:
-                        initial_velocity =data[5:]
-
+                        initial_velocity = data[5:]
+                        currently_falling = True
+                    
+                    if currently_falling == True and not('true' in data[2]):
+                        currently_falling = False
+                        begin_animation = True
+                    
+                    if currently_falling:
+                        animation_data.append((data[1],data[3:5]))
+                        
                 else:
                     stats[1] ='Fall Distance: '+data[2]
                     currently_falling = False
@@ -101,15 +109,63 @@ while True:
                     e.set() #stop bluetooth thread
             
             if begin_animation:
-                updated_data.clear() 
+                animation_data.reverse()
+                Dtime, orientation = map(list,zip(*animation_data))
+                start_delta_t = Dtime[-1]
 
+                #swapping y and z axis so it looks normal on plot
+                vz = initial_velocity[1]
+                vx = initial_velocity[0]
+                vy = initial_velocity[2]
+
+                x = 0
+                y=0
+                z=0
+                
+                while(len(Dtime)>1):
+                    new_t = Dtime.pop()
+                    Rotations = orientation.pop()
+
+                    time_step = (new_t - start_delta_t)*0.001
+
+                    z += vz*time_step +(0.5)*(9.8)*time_step*time_step 
+                    vz -= 9.8*time_step 
+
+                    y += vy*time_step
+                    x += vx*time_step
+
+                    plot.add_pitch_value(Rotations[0])
+                    plot.add_roll_value(Rotations[1])
+                    plot.add_3d_point((x,y,z))
+                    start_delta_t = new_t
+                
+                if len(Dtime)==1:
+                    new_t = Dtime.pop()
+                    Rotations = orientation.pop()
+
+                    time_step = (new_t - start_delta_t)*0.001
+
+                    z += vz*time_step +(0.5)*(9.8)*time_step*time_step 
+                    vz -= 9.8*time_step 
+
+                    y += vy*time_step
+                    x += vx*time_step
+
+                    plot.add_pitch_value(Rotations[0])
+                    plot.add_roll_value(Rotations[1])
+                    plot.add_3d_point((x,y,z),block=True)
+                    start_delta_t = new_t
+
+
+                updated_data.clear() 
+                begin_animation = False
                 pass
 
             if update:
                 plot.update_label(display_stats(stats))
                 update=False
 
-            print(time.time()-st)
+            # print(time.time()-st)
         except:
             print("~~~~NO DATA~~~~")
             pass
