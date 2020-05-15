@@ -57,8 +57,8 @@ def run(event):
         pass
 
 e = threading.Event()
-# display_thread = threading.Thread(target=run,args=(e,))
-display_thread = Process(target=run, args=(e,))
+display_thread = threading.Thread(target=run,args=(e,))
+# display_thread = Process(target=run, args=(e,))
 display_thread.start()
 
 def validate_data(data):
