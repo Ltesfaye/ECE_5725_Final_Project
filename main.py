@@ -110,7 +110,7 @@ while not(done) :
                     begin_animation = True
                     
             
-            if begin_animation:
+            if begin_animation and (threading.current_thread() is threading.main_thread()):
                 
                 plot.update_label(display_stats(stats))
                 update=False
@@ -173,7 +173,6 @@ while not(done) :
                 plot.update_label(display_stats(stats))
                 update=False
 
-            # print(time.time()-st)
         except:
             print("~~~~NO DATA~~~~")
             pass
