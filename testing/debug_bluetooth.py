@@ -1,4 +1,5 @@
 from bluetooth import *
+import time
 
 port = 1
 
@@ -13,10 +14,13 @@ client_sock, client_info = server_sock.accept()
 print("Accepted connection from ", client_info)
 
 try:
+    start = time.time()
     while True:
         data = client_sock.recv(1024)
         if len(data) == 9: break
         print("received [%s]" % data)
+        print(time.time()-start)
+        start= time.time()
 except IOError:
     pass
 

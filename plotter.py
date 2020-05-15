@@ -76,12 +76,13 @@ class Plotter:
         self.reset_pitch()
         self.reset_roll()
 
-    def update_label(self,new_label):
+    def update_label(self,new_label,initial=False):
         self.label.set_visible(False)
         self.label=  plt.gcf().text(0.02, 0.5, new_label, fontsize=9)
         plt.draw()
         plt.show(block=False)
-        plt.pause(0.005)
+        if initial:
+            plt.pause(0.005)
 
     def add_pitch_value(self,p,block=False):
         self.hl_pitch.set_xdata(np.append(self.hl_pitch.get_xdata(), self.pitch_counter))
