@@ -1,10 +1,8 @@
 from plotter import Plotter
 from bluedot.btcomm import BluetoothServer
-import re #used to validate states
 from collections import deque
 import threading
-import time
-import numpy as np
+
 
 def cleanser():
     import bluetooth
@@ -110,7 +108,7 @@ while not(done) :
                     begin_animation = True
                     
             
-            if begin_animation:
+            if begin_animation and (threading.current_thread() is threading.main_thread()):
                 
                 plot.update_label(display_stats(stats))
                 update=False
@@ -173,12 +171,7 @@ while not(done) :
                 plot.update_label(display_stats(stats))
                 update=False
 
-            # print(time.time()-st)
         except:
             print("~~~~NO DATA~~~~")
             pass
-
-
-
-
 
