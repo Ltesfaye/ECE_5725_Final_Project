@@ -11,7 +11,27 @@ update= False
 begin_animation = False
 updated_data=Queue()
 
-#validate_data = lambda data:all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:]) and not(re.match(r'^-?\d+(?:\.\d+)?$', data[1]) is None)
+
+display_stats = lambda l:'\n'.join(l)
+plot = Plotter(display_stats(stats))
+plot.start()
+
+def run():
+    global updated_data
+
+    def data_received(data):
+        global updated_data
+        stats[4] = 'Bluetooth Connected: True'
+        updated_data.put(data) # adds data to the queue and leaves
+
+    s = BluetoothServer(data_received)#starts RFCOMM Server
+
+    while True:
+        pass
+
+display_thread = threading.Thread(target=run)
+display_thread.start()
+
 
 def validate_data(data):
     if data[0] in ['~~','##','**']:
@@ -29,21 +49,11 @@ def validate_data(data):
    
     return False
 
-def data_received(data):
-    global updated_data
-    stats[4] = 'Bluetooth Connected: True'
-    updated_data.put(data) # adds data to the queue and leaves
+
+
     
-    
-
-s = BluetoothServer(data_received)#starts RFCOMM Server
-display_stats = lambda l:'\n'.join(l)
-plot = Plotter(display_stats(stats))
-plot.start()
-
-
-def run():
-    while True:
+        
+while True:
         if not(updated_data.empty()):
             data = updated_data.get()
             data= data.split(',')
@@ -60,11 +70,9 @@ def run():
             if update:
                 plot.update_label(display_stats(stats))
                 update=False
-        
-display_thread = threading.Thread(target=run)
-display_thread.start()
 
-s.stop()
+
+
 
 
 
