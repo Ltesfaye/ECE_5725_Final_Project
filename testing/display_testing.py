@@ -8,7 +8,8 @@ def data_received(data):
 s = BluetoothServer(data_received)
 while True:
     pass
-# pause()
+
+s.stop()
 
 
 
