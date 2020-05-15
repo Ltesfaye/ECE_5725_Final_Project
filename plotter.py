@@ -87,10 +87,8 @@ class Plotter:
     def update_label(self,new_label,initial=False):
         self.label.set_visible(False)
         self.label=  plt.gcf().text(0.02, 0.5, new_label, fontsize=9)
-        # plt.draw()
         self.draw()
-        # plt.show(block=False)
-        # plt.pause(0.001)
+
 
     def add_pitch_value(self,p,block=False):
         self.hl_pitch.set_xdata(np.append(self.hl_pitch.get_xdata(), self.pitch_counter))
@@ -99,7 +97,6 @@ class Plotter:
         self.pitch_figure.set_xlim([0,self.pitch_counter])
         plt.draw()
         self.draw()
-        # plt.show(block=block)
     
     def add_roll_value(self, p,block=False):
         self.hl_roll.set_xdata(np.append(self.hl_roll.get_xdata(), self.roll_counter))
@@ -108,11 +105,13 @@ class Plotter:
         self.roll_figure.set_xlim([0,self.roll_counter])
         plt.draw()
         self.draw()
-        # plt.show(block=block)
+
         
     def add_3d_point(self, p, block= False , pause=True):
         self.update_3d_line(self.hl, p)
-        plt.show(block=block)
+        self.draw()
+        if block:
+            plt.show(block=block)
         if pause:
             plt.pause(0.001)
     
@@ -120,9 +119,7 @@ class Plotter:
         fig = plt.gcf()
         fig.show()
         fig.canvas.draw()
-        # plt.draw()
-        # plt.show(block=False)
-        # plt.pause(0.001)
+
     def draw(self):
         plt.gcf().canvas.draw()
 
@@ -143,60 +140,5 @@ class Plotter:
         self.add_3d_point((8,8, 8),block=True)
 
 
-# plot = Plotter('HI')
-# plot.run_test()
+
       
- 
- 
-
-
-
- 
-
-
- 
-
- 
-
-
-
-# from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
-
-# import matplotlib.pyplot as plt
-# import numpy as np
-
-
-# def f(t):
-#     return np.cos(2*np.pi*t) * np.exp(-t)
-
-
-# # Set up a figure twice as tall as it is wide
-# fig = plt.figure(figsize=plt.figaspect(2.))
-# fig.suptitle('A tale of 2 subplots')
-
-# # First subplot
-# ax = fig.add_subplot(2, 1, 1)
-
-# t1 = np.arange(0.0, 5.0, 0.1)
-# t2 = np.arange(0.0, 5.0, 0.02)
-# t3 = np.arange(0.0, 2.0, 0.01)
-
-# ax.plot(t1, f(t1), 'bo',
-#         t2, f(t2), 'k--', markerfacecolor='green')
-# ax.grid(True)
-# ax.set_ylabel('Damped oscillation')
-
-# # Second subplot
-# ax = fig.add_subplot(2, 1, 2, projection='3d')
-
-# X = np.arange(-5, 5, 0.25)
-# Y = np.arange(-5, 5, 0.25)
-# X, Y = np.meshgrid(X, Y)
-# R = np.sqrt(X**2 + Y**2)
-# Z = np.sin(R)
-
-# surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1,
-#                        linewidth=0, antialiased=False)
-# ax.set_zlim(-1, 1)
-
-# plt.show()

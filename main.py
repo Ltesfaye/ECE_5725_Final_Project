@@ -10,7 +10,17 @@ begin_animation = False
 #validate_data = lambda data:all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:]) and not(re.match(r'^-?\d+(?:\.\d+)?$', data[1]) is None)
 
 def validate_data(data):
-    if data[0] in ['~~','##','**'] and True:
+    if data[0] in ['~~','##','**']:
+        for d in range(3,9):
+            try:
+                data[d] = float(data[d])
+            except:
+                return False
+        try:
+            data[1] = float(data[1])
+        except:
+            return False
+        
         return True
    
     return False
@@ -22,10 +32,9 @@ def data_received(data):
     
 
     data= data.split(',')
-    if len(data)==9:
-    # and validate_data(data):
+    if len(data)==9 and validate_data(data):
         print(data[1])
-        print(stats)
+        
         
         if data[0] !="##":
             stats[0] =''.join(['Fall Status: ', str('true' in data[2])])
