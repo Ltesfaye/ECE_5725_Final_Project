@@ -50,9 +50,9 @@ def run(event):
 
     while True:	   
         event_set = event.wait(0.00001)
-     	if event_set or should_kill_thread:
-           	s.stop()
-           	break
+        if event_set or should_kill_thread:
+            s.stop()
+            break
         pass
 
 e = threading.Event()
