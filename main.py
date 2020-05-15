@@ -33,9 +33,9 @@ def data_received(data):
 
     data= data.split(',')
     if len(data)==9 and validate_data(data):
-        print(data[1])
-        
-        
+        # print(data[1])
+        stats[2] = "Pitch : "+str(data[4])
+        stats[3] = "Roll : "+ str(data[5])
         if data[0] !="##":
             stats[0] =''.join(['Fall Status: ', str('true' in data[2])])
         else:
