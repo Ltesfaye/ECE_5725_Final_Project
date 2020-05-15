@@ -12,7 +12,7 @@ def data_received(data):
 s = BluetoothServer(data_received)#starts RFCOMM Server
 
 plot = Plotter(display_stats(stats))
-plot.start()
+
 while True:
     
     pass
