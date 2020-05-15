@@ -11,11 +11,11 @@ from plotter import Plotter
 
 class Animate_phone:
 
-    def __init__(self,client_sock,server_sock):
+    def __init__(self,client_sock):
     
         #Used for reading and handling user inputs
         self.client_sock = client_sock
-        self.server_sock = server_sock
+        
 
         #Default stats label to be displayed
         self.stats = ['Fall Status: False','Fall Distance: Nan',"Pitch :0","Roll:0"]
@@ -83,7 +83,6 @@ class Animate_phone:
     def valid_data(self,data):
             return all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:]) and not(re.match(r'^-?\d+(?:\.\d+)?$', data[1]) is None)
 
-    
     def get_recent_valid_data(self):
         plot = Plotter(self.display_stats())
         plot.start()
@@ -117,11 +116,7 @@ class Animate_phone:
         return display
     
     def run(self,debug=False):
-        
-        # self.bluetoth_thread = threading.Thread(target=self.get_recent_valid_data)
-        # self.bluetoth_thread.start()
 
-       
         start = time.time()
         while True:
             data = str(self.client_sock.recv(1024).decode('utf-8'))
@@ -165,74 +160,66 @@ class Animate_phone:
                     self.parse_save_data(data,state,s0,s1)
                     if save:
                         self.save_and_close_animation_doc()
-                    
-                    print("Killing it",time.time()-start)
-                    start = time.time()
+                    if debug:
+                        print("Killing it",time.time()-start)
+                        start = time.time()
 
-                    # self.iter_barrier.wait()
-                    # self.iter_barrier.wait()
+
+
+# def start():
     
-
-def start():
-    
-    import signal
-    import sys
-    import time
+#     import signal
+#     import sys
+#     import time
 
 
 
 
-    #Setting up the debug flag
-    debug = False
+#     #Setting up the debug flag
+#     debug = False
 
-    #setting up bluetooth server socket
-    server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+#     #setting up bluetooth server socket
+#     server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
-    #waiting for a connection on port1
-    port=1
-    server_sock.bind(("",port))
-    server_sock.listen(1)
+#     #waiting for a connection on port1
+#     port=1
+#     server_sock.bind(("",port))
+#     server_sock.listen(1)
 
-    client_sock,address = server_sock.accept()
-    print ("Resetting connection from", address)
+#     client_sock,address = server_sock.accept()
+#     print ("Resetting connection from", address)
 
-    client_sock.close()
-    server_sock.close()
+#     client_sock.close()
+#     server_sock.close()
 
-    time.sleep(1)
+#     time.sleep(1)
 
-    #setting up bluetooth server socket
-    server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
-    #waiting for a connection on port1
-    port=1
-    server_sock.bind(("",port))
-    server_sock.listen(1)
-    client_sock,address = server_sock.accept()
+#     #setting up bluetooth server socket
+#     server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
-    print ("Accepted connection from", address)
+#     #waiting for a connection on port1
+#     port=1
+#     server_sock.bind(("",port))
+#     server_sock.listen(1)
+#     client_sock,address = server_sock.accept()
 
-    #Signal Handler for not safe closing
-    def signal_handler(sig, frame):
-        print('You pressed Ctrl+C!')
-        client_sock.close()
-        server_sock.close()
-        sys.exit(0)
+#     print ("Accepted connection from", address)
 
-    signal.signal(signal.SIGINT, signal_handler)
 
-    if debug:
-        while True:
-            data = client_sock.recv(1024)
-            print ("received [%s]" %data)
 
-            if (data=="e"):
-                print("Exit")
-                break
-    else:
-        print("____Starting Display____")
-        display = Animate_phone(client_sock,server_sock)
-        display.run()
+#     if debug:
+#         while True:
+#             data = client_sock.recv(1024)
+#             print ("received [%s]" %data)
+
+#             if (data=="e"):
+#                 print("Exit")
+#                 break
+#     else:
+#         print("____Starting Display____")
+#         display = Animate_phone(client_sock,server_sock)
+#         display.run()
 
 
     
