@@ -37,20 +37,17 @@ plot = Plotter(display_stats(stats))
 plot.start()
 
 def run(event):
-    should_kill_thread=False
-    def when_client_leaves():
-        should_kill_thread= True
+   
     def data_received(data):
         updated_data.append(data) # adds data to the queue and leaves
 
-
-    s = BluetoothServer(data_received,when_client_disconnects=when_client_leaves)#starts RFCOMM Server
+    s = BluetoothServer(data_received)#starts RFCOMM Server
 
     while True:
         event_set = event.wait(0.00001)
-        if event_set or should_kill_thread:
+        if event_set:
             s.stop()
-            break
+            
         pass
 
 
