@@ -3,6 +3,7 @@ from bluedot.btcomm import BluetoothServer
 import re #used to validate states
 from collections import deque
 import threading
+import time
 
 def cleanser():
     import bluetooth
@@ -33,16 +34,23 @@ display_stats = lambda l:'\n'.join(l)
 plot = Plotter(display_stats(stats))
 plot.start()
 
-def run():
+def run(event):
     def data_received(data):
         updated_data.append(data) # adds data to the queue and leaves
 
     s = BluetoothServer(data_received)#starts RFCOMM Server
 
     while True:
+        event_set = event.wait(0.0001)
+        if event_set:
+            s.close
+            break
         pass
 
-display_thread = threading.Thread(target=run)
+
+
+e = threading.Event()
+display_thread = threading.Thread(target=run,args=(e,))
 display_thread.start()
 
 
@@ -71,10 +79,10 @@ Fall_initial = [0,0,0]
 updated_data.clear()
 while True:
         try:
+            st = time.time()
             data = updated_data.popleft()
             stats[4] = 'B-Paired: True'
             data= data.split(',')
-            print(len(data)==8 and validate_data(data))
             if len(data)==8 and validate_data(data):
                 update = True
                 stats[2] = "Pitch : "+str(data[3])
@@ -89,14 +97,17 @@ while True:
                     stats[1] ='Fall Distance: '+data[2]
                     currently_falling = False
                     begin_animation = True
+                    e.set() #stop bluetooth thread
             
             if begin_animation:
-                updated_data 
+                updated_data.clear() 
+
                 pass
 
             if update:
                 plot.update_label(display_stats(stats))
                 update=False
+            print(time.time()-st)
         except:
             print("~~~~NO DATA~~~~")
             pass
