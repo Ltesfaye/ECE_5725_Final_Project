@@ -28,22 +28,27 @@ server_sock.bind(("",port))
 server_sock.listen(1)
 client_sock,address = server_sock.accept()
 
-client_sock.settimeout(1)
+client_sock.settimeout(0.1)
 
 print ("Accepted connection from", address)
 start = time.time()
 while True:
+    try:
+        data = client_sock.recv(1024)
+        print ("received [%s]" %data)
+
+        print("Killing it",time.time()-start)
+        start = time.time()
+
+        if (data=="e"):
+            print("Exit")
+            break
+    except:
+        print("---------Timed Out---------")
+
+    
+
    
-    data = client_sock.recv(1024)
-
-    print ("received [%s]" %data)
-
-    print("Killing it",time.time()-start)
-    start = time.time()
-
-    if (data=="e"):
-        print("Exit")
-        break
 
 client_sock.close()
 server_sock.close()
