@@ -111,7 +111,7 @@ while not(done) :
                     e.set() #stop bluetooth thread
             
             if begin_animation:
-                print(len(animation_data))
+                print(threading.active_count())
                 plot.update_label(display_stats(stats))
                 update=False
                 #clearing anything plotted
