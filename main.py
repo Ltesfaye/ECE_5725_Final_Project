@@ -23,7 +23,7 @@ def cleanser():
 cleanser()
 cleanser()
 
-stats = ['Fall Status: False','Fall Distance: Nan',"Pitch: 0","Roll: 0",'Bluetooth Connected: False']
+stats = ['Fall Status: False','Fall Distance: Nan',"Pitch: 0","Roll: 0",'B-Paired: False']
 update= False
 begin_animation = False
 updated_data=deque()
@@ -68,10 +68,11 @@ def validate_data(data):
 initial_velocity = []  
 currently_falling=False 
 Fall_initial = [0,0,0]
+updated_data.clear()
 while True:
         try:
             data = updated_data.popleft()
-            stats[4] = 'Bluetooth Connected: True'
+            stats[4] = 'B-Paired: True'
             data= data.split(',')
             print(len(data)==8 and validate_data(data))
             if len(data)==8 and validate_data(data):
@@ -97,6 +98,7 @@ while True:
                 plot.update_label(display_stats(stats))
                 update=False
         except:
+            print("~~~~NO DATA~~~~")
             pass
 
 
