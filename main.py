@@ -21,8 +21,9 @@ def cleanser():
 
     client_sock.close()
     server_sock.close()
-cleanser()
-cleanser()
+
+for i in range(5):
+    cleanser()
 
 stats = ['Fall Status: False','Fall Distance: Nan',"Pitch: 0","Roll: 0",'B-Paired: False']
 update= False
@@ -107,6 +108,7 @@ while True:
             if update:
                 plot.update_label(display_stats(stats))
                 update=False
+
             print(time.time()-st)
         except:
             print("~~~~NO DATA~~~~")
