@@ -16,6 +16,7 @@ def data_received(data):
     global update,begin_animation
     data= data.split(',')
     print(data[1])
+    update = False
     if len(data)==9 and validate_data(data):
         
         update=True
@@ -32,13 +33,13 @@ s = BluetoothServer(data_received)#starts RFCOMM Server
 
 
 while True:
-    if update:
-        if s.client_connected:
-            stats[4] = 'Bluetooth Connected: True'
-        else:
-            stats[4] = 'Bluetooth Connected: False'
+    
+    if s.client_connected:
+        stats[4] = 'Bluetooth Connected: True'
+    else:
+        stats[4] = 'Bluetooth Connected: False'
 
-        plot.update_label(display_stats(stats))
+    plot.update_label(display_stats(stats))
     
     pass
 
