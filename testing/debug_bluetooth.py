@@ -14,7 +14,10 @@ print("Accepted connection from ", client_info)
 
 try:
     while True:
-        data = client_sock.recv(1024)
+        try:
+            data = client_sock.recv(1024)
+        except:
+            print("WHAT")
         if len(data) == 0: break
         print("received [%s]" % data)
 except IOError:
