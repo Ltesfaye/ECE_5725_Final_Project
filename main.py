@@ -151,7 +151,7 @@ while not(done) :
 
                     plot.add_pitch_value(Rotations[0])
                     plot.add_roll_value(Rotations[1])
-                    plot.add_3d_point((x,y,z),block=True)
+                    plot.add_3d_point((x,y,z))
                     start_delta_t = new_t
                 
                 if len(Dtime)==1:
@@ -183,7 +183,7 @@ while not(done) :
                 update=False
 
         except:
-            print("~~~~NO DATA~~~~")
+            # print("~~~~NO DATA~~~~")
             pass
 
 
