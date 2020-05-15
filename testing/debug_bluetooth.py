@@ -28,7 +28,7 @@ server_sock.bind(("",port))
 server_sock.listen(1)
 client_sock,address = server_sock.accept()
 
-client_sock.settimeout(0.1)
+client_sock.settimeout(0.5)
 
 print ("Accepted connection from", address)
 start = time.time()
