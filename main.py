@@ -15,8 +15,8 @@ def data_received(data):
     stats[4] = 'Bluetooth Connected: True'
 
     data= data.split(',')
-    print(data[1])
     if len(data)==9 and validate_data(data):
+        print(data[1])
         
         if data[0] !="##":
             stats[0] =''.join(['Fall Status: ', str('true' in data[2])])
