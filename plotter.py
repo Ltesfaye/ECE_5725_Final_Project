@@ -88,8 +88,9 @@ class Plotter:
         self.label.set_visible(False)
         self.label=  plt.gcf().text(0.02, 0.5, new_label, fontsize=9)
         plt.draw()
-        plt.show(block=False)
-        plt.pause(0.001)
+        self.draw()
+        # plt.show(block=False)
+        # plt.pause(0.001)
 
     def add_pitch_value(self,p,block=False):
         self.hl_pitch.set_xdata(np.append(self.hl_pitch.get_xdata(), self.pitch_counter))
@@ -97,7 +98,8 @@ class Plotter:
         self.pitch_counter +=1
         self.pitch_figure.set_xlim([0,self.pitch_counter])
         plt.draw()
-        plt.show(block=block)
+        self.draw()
+        # plt.show(block=block)
     
     def add_roll_value(self, p,block=False):
         self.hl_roll.set_xdata(np.append(self.hl_roll.get_xdata(), self.roll_counter))
@@ -105,7 +107,8 @@ class Plotter:
         self.roll_counter +=1
         self.roll_figure.set_xlim([0,self.roll_counter])
         plt.draw()
-        plt.show(block=block)
+        self.draw()
+        # plt.show(block=block)
         
     def add_3d_point(self, p, block= False , pause=True):
         self.update_3d_line(self.hl, p)
@@ -120,6 +123,8 @@ class Plotter:
         plt.draw()
         plt.show(block=False)
         # plt.pause(0.001)
+    def draw(self):
+        plt.gcf().canvas.draw()
 
     def run_test(self):
         
