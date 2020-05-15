@@ -37,19 +37,23 @@ plot = Plotter(display_stats(stats))
 plot.start()
 
 def run(event):
-   
-    def data_received(data):
-        updated_data.append(data) # adds data to the queue and leaves
+    should_kill_thread=False
+    def when_client_leaves():
+        should_kill_thread= True
+    def data_received(data):	  
+        updated_data.append(data) # adds data to the queue and leaves	  
 
-    s = BluetoothServer(data_received)#starts RFCOMM Server
 
-    while True:
+    s = BluetoothServer(data_received)#starts RFCOMM Server	
+    s = BluetoothServer(data_received, when_client_disconnects=when_client_leaves)#starts RFCOMM Server
+
+
+    while True:	   
         event_set = event.wait(0.00001)
-        if event_set:
-            s.stop()
-            break
-            
-
+     	if event_set or should_kill_thread:
+           	s.stop()
+           	break
+        pass
 
 e = threading.Event()
 display_thread = threading.Thread(target=run,args=(e,))
@@ -110,9 +114,10 @@ while not(done) :
                     begin_animation = True
                     
             
-            if begin_animation and (threading.current_thread() is threading.main_thread()):
+            if begin_animation:
                 
                 plot.update_label(display_stats(stats))
+                e.set()
                 update=False
                 #clearing anything plotted
                 plot.reset_pitch_roll_graph()
