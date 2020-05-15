@@ -11,8 +11,8 @@ class Plotter:
         
         #figures for drawing the position,pitch and roll
         self.map_ax = self.map.add_subplot(1, 2, 1, projection='3d')
-        self.pitch_figure = self.map.add_subplot(2, 2, 2,constrained_layout=True)
-        self.roll_figure = self.map.add_subplot(2, 2, 4,constrained_layout=True)
+        self.pitch_figure = self.map.add_subplot(2, 2, 2)
+        self.roll_figure = self.map.add_subplot(2, 2, 4)
 
         #display label
         self.label = plt.gcf().text(0.02, 0.5, labels, fontsize=9)
@@ -42,8 +42,14 @@ class Plotter:
         
         self.roll_figure.set_ylim([-360,360])
         self.pitch_figure.set_ylim([-360,360])
+        left  = 0.125  # the left side of the subplots of the figure
+        right = 0.9    # the right side of the subplots of the figure
+        bottom = 0.1   # the bottom of the subplots of the figure
+        top = 0.9      # the top of the subplots of the figure
+        wspace = 0.2   # the amount of width reserved for blank space between subplots
+        hspace = 1  # the amount of height reserved for white space between subplots
         
-        # plt.subplots_adjust(left=0.left, bottom=bottom, right=right, top=top, wspace=wspace, hspace=hspace)
+        plt.subplots_adjust(left=left, bottom=bottom, right=right, top=top, wspace=wspace, hspace=hspace)
 
        
     
