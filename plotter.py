@@ -117,7 +117,7 @@ class Plotter:
     def start(self):
         plt.draw()
         plt.show(block=False)
-        # plt.pause(0.005)
+        plt.pause(0.005)
 
     def run_test(self):
         
