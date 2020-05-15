@@ -1,11 +1,14 @@
 from plotter import Plotter
 from bluedot.btcomm import BluetoothServer
 import re #used to validate states
+from queue import Queue
+
 
 
 stats = ['Fall Status: False','Fall Distance: Nan',"Pitch: 0","Roll: 0",'Bluetooth Connected: False']
 update= False
 begin_animation = False
+updated_data=Queue()
 
 #validate_data = lambda data:all(not(re.match(r'^-?\d+(?:\.\d+)?$', d) is None) for d in data[3:]) and not(re.match(r'^-?\d+(?:\.\d+)?$', data[1]) is None)
 
@@ -26,22 +29,9 @@ def validate_data(data):
     return False
 
 def data_received(data):
-    global update,begin_animation,stats
-
+    global updated_data
     stats[4] = 'Bluetooth Connected: True'
-    
-
-    data= data.split(',')
-    if len(data)==9 and validate_data(data):
-        print(data[1])
-        update = True
-        stats[2] = "Pitch : "+str(data[4])
-        stats[3] = "Roll : "+ str(data[5])
-        if data[0] !="##":
-            stats[0] =''.join(['Fall Status: ', str('true' in data[2])])
-        else:
-            stats[1] ='Fall Distance: '+data[2]
-            begin_animation = True
+    updated_data.put(data) # adds data to the queue and leaves
     
     
 
@@ -53,8 +43,22 @@ plot.start()
 
 
 while True:
-    if update:
-        plot.update_label(display_stats(stats))
+    if not(updated_data.empty()):
+        data = updated_data.get()
+        data= data.split(',')
+        if len(data)==9 and validate_data(data):
+            print(data[1])
+            update = True
+            stats[2] = "Pitch : "+str(data[4])
+            stats[3] = "Roll : "+ str(data[5])
+            if data[0] !="##":
+                stats[0] =''.join(['Fall Status: ', str('true' in data[2])])
+            else:
+                stats[1] ='Fall Distance: '+data[2]
+                begin_animation = True
+        if update:
+            plot.update_label(display_stats(stats))
+            update=False
     
     pass
 
