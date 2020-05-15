@@ -4,7 +4,6 @@ import re #used to validate states
 
 
 stats = ['Fall Status: False','Fall Distance: Nan',"Pitch: 0","Roll: 0",'Bluetooth Connected: False']
-display_stats = lambda l:'\n'.join(l)
 update= False
 begin_animation = False
 
@@ -37,6 +36,7 @@ def data_received(data):
     
 
 s = BluetoothServer(data_received)#starts RFCOMM Server
+display_stats = lambda l:'\n'.join(l)
 plot = Plotter(display_stats(stats))
 plot.start()
 

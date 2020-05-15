@@ -89,8 +89,7 @@ class Plotter:
         self.label=  plt.gcf().text(0.02, 0.5, new_label, fontsize=9)
         plt.draw()
         plt.show(block=False)
-        if initial:
-            plt.pause(0.005)
+        plt.pause(0.001)
 
     def add_pitch_value(self,p,block=False):
         self.hl_pitch.set_xdata(np.append(self.hl_pitch.get_xdata(), self.pitch_counter))
