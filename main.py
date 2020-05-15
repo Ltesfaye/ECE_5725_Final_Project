@@ -19,12 +19,14 @@ def validate_data(data):
 def data_received(data):
     global begin_animation,stats
 
-    stats[4] = 'Bluetooth Connected: True'
+    # stats[4] = 'Bluetooth Connected: True'
+    
 
     data= data.split(',')
     if len(data)==9:
     # and validate_data(data):
         print(data[1])
+        print(stats)
         
         if data[0] !="##":
             stats[0] =''.join(['Fall Status: ', str('true' in data[2])])
