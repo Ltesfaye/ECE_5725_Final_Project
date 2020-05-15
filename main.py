@@ -33,7 +33,7 @@ s = BluetoothServer(data_received)#starts RFCOMM Server
 
 while True:
     if update:
-        if s.client_connected():
+        if s.client_connected:
             stats[4] = 'Bluetooth Connected: True'
         else:
             stats[4] = 'Bluetooth Connected: False'
