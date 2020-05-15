@@ -3,6 +3,7 @@ from bluedot.btcomm import BluetoothServer
 import re #used to validate states
 from collections import deque
 import threading
+from multiprocessing import Process
 import time
 import numpy as np
 
@@ -56,7 +57,8 @@ def run(event):
         pass
 
 e = threading.Event()
-display_thread = threading.Thread(target=run,args=(e,))
+# display_thread = threading.Thread(target=run,args=(e,))
+display_thread = Process(target=run, args=(e,))
 display_thread.start()
 
 def validate_data(data):
