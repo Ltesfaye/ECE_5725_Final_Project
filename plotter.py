@@ -87,7 +87,7 @@ class Plotter:
     def update_label(self,new_label,initial=False):
         self.label.set_visible(False)
         self.label=  plt.gcf().text(0.02, 0.5, new_label, fontsize=9)
-        plt.draw()
+        # plt.draw()
         self.draw()
         # plt.show(block=False)
         # plt.pause(0.001)
@@ -120,8 +120,8 @@ class Plotter:
         fig = plt.gcf()
         fig.show()
         fig.canvas.draw()
-        plt.draw()
-        plt.show(block=False)
+        # plt.draw()
+        # plt.show(block=False)
         # plt.pause(0.001)
     def draw(self):
         plt.gcf().canvas.draw()
