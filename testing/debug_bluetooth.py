@@ -56,8 +56,10 @@
 
 from bluetooth import *
 
+port = 1
+
 server_sock=BluetoothSocket( RFCOMM )
-server_sock.bind(("",1))
+server_sock.bind(("",port))
 server_sock.listen(1)
 
 
