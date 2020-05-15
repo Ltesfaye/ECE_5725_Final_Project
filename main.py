@@ -7,9 +7,6 @@ import threading
 def cleanser():
     import bluetooth
 
-    #Setting up the debug flag
-    debug = False
-
     #setting up bluetooth server socket
     server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
@@ -76,15 +73,16 @@ while True:
             data = updated_data.popleft()
             stats[4] = 'Bluetooth Connected: True'
             data= data.split(',')
+            print(len(data)==8 and validate_data(data))
             if len(data)==8 and validate_data(data):
                 update = True
-                stats[2] = "Pitch : "+str(data[4])
-                stats[3] = "Roll : "+ str(data[5])
+                stats[2] = "Pitch : "+str(data[3])
+                stats[3] = "Roll : "+ str(data[4])
                 if data[0] !="##":
                     stats[0] =''.join(['Fall Status: ', str('true' in data[2])])
 
                     if currently_falling == False and 'true' in data[2]:
-                        initial_velocity =data[6:]
+                        initial_velocity =data[5:]
 
                 else:
                     stats[1] ='Fall Distance: '+data[2]
