@@ -47,8 +47,8 @@ def run(event):
         event_set = event.wait(0.00001)
         if event_set:
             s.stop()
+            break
             
-        pass
 
 
 e = threading.Event()
