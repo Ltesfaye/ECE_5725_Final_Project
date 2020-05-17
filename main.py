@@ -1,8 +1,10 @@
 from plotter import Plotter
 from bluedot.btcomm import BluetoothServer
+import re #used to validate states
 from collections import deque
 import threading
-
+import time
+import numpy as np
 
 def cleanser():
     import bluetooth
@@ -35,23 +37,24 @@ plot = Plotter(display_stats(stats))
 plot.start()
 
 def run(event):
-   
     def data_received(data):
         updated_data.append(data) # adds data to the queue and leaves
 
     s = BluetoothServer(data_received)#starts RFCOMM Server
 
     while True:
-        event_set = event.wait(0.00001)
+        event_set = event.wait(0.0001)
         if event_set:
-            s.stop()
+            s.close()
             break
-            
+        pass
+
 
 
 e = threading.Event()
 display_thread = threading.Thread(target=run,args=(e,))
 display_thread.start()
+
 
 def validate_data(data):
     if data[0] in ['~~','##','**']:
@@ -70,15 +73,12 @@ def validate_data(data):
     return False
 
 
-
-
 initial_velocity=[] 
 animation_data=[]
 currently_falling=False 
 
 updated_data.clear()
-done = False
-while not(done) :
+while True:
         try:
             # st = time.time()
             data = updated_data.popleft()
@@ -106,15 +106,9 @@ while not(done) :
                     stats[1] ='Fall Distance: '+data[2]
                     currently_falling = False
                     begin_animation = True
-                    
+                    e.set() #stop bluetooth thread
             
-            if begin_animation and (threading.current_thread() is threading.main_thread()):
-                
-                plot.update_label(display_stats(stats))
-                update=False
-                #clearing anything plotted
-                plot.reset_pitch_roll_graph()
-
+            if begin_animation:
                 animation_data.reverse()
                 Dtime, orientation = map(list,zip(*animation_data))
                 start_delta_t = Dtime[-1]
@@ -164,14 +158,19 @@ while not(done) :
 
 
                 updated_data.clear() 
-                done = True
+                begin_animation = False
                 pass
 
             if update:
                 plot.update_label(display_stats(stats))
                 update=False
 
+            # print(time.time()-st)
         except:
             print("~~~~NO DATA~~~~")
             pass
+
+
+
+
 
