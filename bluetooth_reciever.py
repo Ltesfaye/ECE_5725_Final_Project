@@ -36,7 +36,7 @@ def validate_data(data):
     return False
 
 def launch_run_display(done_event,conn):
-    stats = ['Fall Status: False','Fall Distance: Nan',"Pitch: 0","Roll: 0",'B-Paired: False']
+    stats = ['Fall Status: False',"Pitch: 0","Roll: 0"]
     update= False
     begin_animation = False
 
@@ -62,8 +62,8 @@ def launch_run_display(done_event,conn):
             data= data.split(',')
             if (len(data)==8 and validate_data(data)):
                 update = True
-                stats[2] = ''.join(["Pitch : ",str(data[3])])
-                stats[3] = ''.join(["Roll : ", str(data[4])])
+                stats[1] = ''.join(["Pitch : ",str(data[3])])
+                stats[2] = ''.join(["Roll : ", str(data[4])])
                 if data[0] !="##":
                     stats[0] =''.join(['Fall Status: ', str('true' in data[2])])
 
@@ -79,15 +79,17 @@ def launch_run_display(done_event,conn):
                         animation_data.append((data[1],data[3:5]))
                         
                 else:
-                    stats[1] = ''.join(['Fall Distance: ',data[2]])
+                    # stats[1] = ''.join(['Fall Distance: ',data[2]])
                     currently_falling = False
                     begin_animation = True
                     
             
             if begin_animation:
-                print("starting animation")
+                print("Killing Bluetooth Process")
                 done_event.set() #stop bluetooth process
                 
+                
+                print("~~~starting animation~~~")
                 animation_data.reverse()
                 Dtime, orientation = map(list,zip(*animation_data))
                 start_delta_t = Dtime[-1]
@@ -108,7 +110,7 @@ def launch_run_display(done_event,conn):
 
                     time_step = (new_t - start_delta_t)*0.001
 
-                    z += vz*time_step +(0.5)*(9.8)*time_step*time_step 
+                    z += vz*time_step +(0.5)*(-9.8)*time_step*time_step 
                     vz -= 9.8*time_step 
 
                     y += vy*time_step
@@ -137,6 +139,7 @@ def launch_run_display(done_event,conn):
                     start_delta_t = new_t
 
                 done = True
+                
                
 
             if update:
@@ -152,8 +155,6 @@ def launch_program():
     print("----starting display----")
     launch_run_display(quit_event,parent_conn)
     # _= input()
-    print("Killing Bluetooth Process")
-    quit_event.set()
     p.join()# Wait for the bluetooth process  to finish
     print("Exited Safely")
 
