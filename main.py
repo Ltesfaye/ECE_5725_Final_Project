@@ -58,7 +58,7 @@ display_thread.start()
 
 
 def validate_data(data):
-    if data[0] in ['~~','##','**']:
+    if data[0] in {'~~','##','**'}:
         for d in range(3,8):
             try:
                 data[d] = float(data[d])
@@ -87,8 +87,8 @@ while True:
             data= data.split(',')
             if len(data)==8 and validate_data(data):
                 update = True
-                stats[2] = "Pitch : "+str(data[3])
-                stats[3] = "Roll : "+ str(data[4])
+                stats[2] = ''.join(["Pitch : ",str(data[3])])
+                stats[3] = ''.join(["Roll : ", str(data[4])])
                 if data[0] !="##":
                     stats[0] =''.join(['Fall Status: ', str('true' in data[2])])
 

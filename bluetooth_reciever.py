@@ -62,8 +62,8 @@ def launch_run_display(done_event,conn):
             data= data.split(',')
             if (len(data)==8 and validate_data(data)):
                 update = True
-                stats[2] = "Pitch : "+str(data[3])
-                stats[3] = "Roll : "+ str(data[4])
+                stats[2] = ''.join(["Pitch : ",str(data[3])])
+                stats[3] = ''.join(["Roll : ", str(data[4])])
                 if data[0] !="##":
                     stats[0] =''.join(['Fall Status: ', str('true' in data[2])])
 
@@ -79,12 +79,13 @@ def launch_run_display(done_event,conn):
                         animation_data.append((data[1],data[3:5]))
                         
                 else:
-                    stats[1] ='Fall Distance: '+data[2]
+                    stats[1] = ''.join(['Fall Distance: ',data[2]])
                     currently_falling = False
                     begin_animation = True
                     
             
             if begin_animation:
+                print("starting animation")
                 done_event.set() #stop bluetooth process
                 
                 animation_data.reverse()
