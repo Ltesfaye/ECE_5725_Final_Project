@@ -15,6 +15,8 @@ def bluetooth_client(conn,done_event):
         if done_event.wait(0.0001):
             conn.close()
             s.close()
+            break
+            
 
 
     
