@@ -1,11 +1,12 @@
 from plotter import Plotter # used to plot and animate things
 from multiprocessing import Process, Pipe,Event # used to launch python process on separate core
+from bluedot.btcomm import BluetoothServer #start bluetooth server to allow phone to connect
 
 
 
 
 def bluetooth_client(conn,done_event):
-    from bluedot.btcomm import BluetoothServer #start bluetooth client server 
+    
     def data_received(data):
         conn.send(data) # adds data to the queue and leaves
 
@@ -17,7 +18,7 @@ def bluetooth_client(conn,done_event):
         pass
        
     conn.close()
-    s.close()
+    s.stop()
            
 
 
@@ -34,7 +35,7 @@ def launch_program():
 
     while (time.time()-st)<40:
         print(parent_conn.recv())
-        time.sleep(0.00001)
+        time.sleep(0.0001)
     
     print("Connection QUITTED")
     
@@ -46,4 +47,3 @@ def launch_program():
 
     print("done")
 
-launch_program()
