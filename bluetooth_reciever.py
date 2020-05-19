@@ -1,4 +1,3 @@
-from bluedot.btcomm import BluetoothServer # used to start bluetooth client server to a callback function
 from plotter import Plotter # used to plot and animate things
 from multiprocessing import Process, Pipe,Event # used to launch python process on separate core
 
@@ -6,6 +5,7 @@ from multiprocessing import Process, Pipe,Event # used to launch python process 
 
 
 def bluetooth_client(conn,done_event):
+    from bluedot.btcomm import BluetoothServer #start bluetooth client server 
     def data_received(data):
         conn.send(data) # adds data to the queue and leaves
 
@@ -13,7 +13,7 @@ def bluetooth_client(conn,done_event):
     
     # running = True # used to terminate this process
 
-    while not(done_event.wait(0.0001)):
+    while not(done_event.wait(0.00001)):
         pass
        
     conn.close()
