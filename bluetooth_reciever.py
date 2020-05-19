@@ -44,6 +44,7 @@ def launch_run_display(done_event,conn):
     display_stats = lambda l:'\n'.join(l)
     plot = Plotter(display_stats(stats))
     plot.start()
+    plot.draw()
 
     done = False
     initial_velocity=[] 
@@ -148,6 +149,7 @@ def launch_program():
     p.start()
     print("----starting display----")
     launch_run_display(quit_event,parent_conn)
+    _= input()
     print("Killing Bluetooth Process")
     quit_event.set()
     p.join()# Wait for the bluetooth process  to finish

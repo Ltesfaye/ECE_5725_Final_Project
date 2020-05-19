@@ -1,6 +1,5 @@
 from bluetooth_reciever import launch_program
 
-
 def cleanser():
     import bluetooth
 
@@ -23,5 +22,5 @@ def clean():
     for i in range(5):
         cleanser()
 
-cleanser()
-launch_program()
+clean() # cleans any buffered bluetooth
+launch_program() # launchs server and display process
