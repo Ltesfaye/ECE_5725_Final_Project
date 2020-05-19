@@ -35,3 +35,5 @@ def launch_program():
     
     # Wait for the worker to finish
     p.join()
+
+launch_program()
