@@ -138,9 +138,8 @@ def launch_run_display(done_event,conn):
                     plot.add_3d_point((x,y,z),block=True)
                     start_delta_t = new_t
 
-                done = True
+                return #kills this function
                 
-               
 
             if update and not(done):
                 plot.update_label(display_stats(stats))
@@ -154,7 +153,6 @@ def launch_program():
     p.start()
     print("----starting display----")
     launch_run_display(quit_event,parent_conn)
-    # _= input()
     p.join()# Wait for the bluetooth process  to finish
     print("Exited Safely")
 
