@@ -142,7 +142,7 @@ def launch_run_display(done_event,conn):
                 
                
 
-            if update:
+            if update and not(done):
                 plot.update_label(display_stats(stats))
                 update=False
     
