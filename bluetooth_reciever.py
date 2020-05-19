@@ -49,7 +49,8 @@ def launch_run_display(done_event,conn):
     initial_velocity=[] 
     animation_data=[]
     currently_falling=False 
-
+    pass
+    '''
     while not(done):
         data = conn.recv()
         if data.strip(' ')== 'e':
@@ -138,7 +139,7 @@ def launch_run_display(done_event,conn):
             if update:
                 plot.update_label(display_stats(stats))
                 update=False
-
+    '''
 def launch_program():
     quit_event = Event()
     parent_conn, child_conn = Pipe()

@@ -18,7 +18,10 @@ def cleanser():
     client_sock.close()
     server_sock.close()
 
-for i in range(5):
-    cleanser()
+def clean():
+    #Resets the bluetooth connection 5 times to clear any buffering issue on pi
+    for i in range(5):
+        cleanser()
 
+cleanser()
 launch_program()
