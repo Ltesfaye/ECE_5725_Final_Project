@@ -34,6 +34,7 @@ def launch_program():
 
     while (time.time()-st)<40:
         print(parent_conn.recv())
+        time.sleep(0.00001)
     
     print("Connection QUITTED")
     
