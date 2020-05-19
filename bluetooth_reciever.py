@@ -2,8 +2,6 @@ from plotter import Plotter # used to plot and animate things
 from multiprocessing import Process, Pipe,Event # used to launch python process on separate core
 from bluedot.btcomm import BluetoothServer #start bluetooth server to allow phone to connect
 
-
-
 def bluetooth_client(conn,done_event):
     
     def data_received(data):
@@ -46,18 +44,17 @@ def launch_run_display(done_event,conn):
     plot.start()
     plot.draw()
 
-    done = False
     initial_velocity=[] 
     animation_data=[]
     currently_falling=False 
     
  
-    while not(done):
+    while True:
         data = conn.recv()
         if data.strip(' ')== 'e':
                 #case where phone application is shutdown
                 done_event.set()
-                done = True
+                return
         else:
             data= data.split(',')
             if (len(data)==8 and validate_data(data)):
