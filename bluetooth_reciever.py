@@ -50,8 +50,8 @@ def launch_run_display(done_event,conn):
     initial_velocity=[] 
     animation_data=[]
     currently_falling=False 
-    pass
-    '''
+    
+ 
     while not(done):
         data = conn.recv()
         if data.strip(' ')== 'e':
@@ -59,6 +59,7 @@ def launch_run_display(done_event,conn):
                 done_event.set()
                 done = True
         else:
+            data= data.split(',')
             if (len(data)==8 and validate_data(data)):
                 update = True
                 stats[2] = "Pitch : "+str(data[3])
@@ -140,7 +141,7 @@ def launch_run_display(done_event,conn):
             if update:
                 plot.update_label(display_stats(stats))
                 update=False
-    '''
+    
 def launch_program():
     quit_event = Event()
     parent_conn, child_conn = Pipe()
@@ -149,7 +150,7 @@ def launch_program():
     p.start()
     print("----starting display----")
     launch_run_display(quit_event,parent_conn)
-    _= input()
+    # _= input()
     print("Killing Bluetooth Process")
     quit_event.set()
     p.join()# Wait for the bluetooth process  to finish
