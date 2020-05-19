@@ -10,13 +10,14 @@ def bluetooth_client(conn,done_event):
         conn.send(data) # adds data to the queue and leaves
 
     s = BluetoothServer(data_received)#starts RFCOMM Server
+    
+    running = True # used to terminate this process
 
-    while True:
+    while running:
         if done_event.wait(0.0001):
             conn.close()
             s.close()
-            break
-            
+            running = False
 
 
     
@@ -35,6 +36,7 @@ def launch_program():
     
     quit_event.set()
     
+    print("Cnnection QUITTED")
     # Wait for the worker to finish
     p.join()
 
