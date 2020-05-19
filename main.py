@@ -3,6 +3,7 @@ from bluedot.btcomm import BluetoothServer
 import re #used to validate states
 from collections import deque
 import threading
+import multiprocessing
 import time
 import numpy as np
 
