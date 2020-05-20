@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Fall Detection</string>
+    <string name="live_update">ToggleButton</string>
+    <string name="holding">Holding</string>
+    <string name="live">Live update!!!</string>
+    <string name="debug_outputs">NAN!!!</string>
+    <string name="debug_values">Debug Outputs:</string>
+    <string name="textview">TextView</string>
+
+
+</resources>
