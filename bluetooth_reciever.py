@@ -54,7 +54,7 @@ def launch_run_display(done_event,conn):
         if data.strip(' ')== 'e':
                 #case where phone application is shutdown
                 done_event.set()
-                return
+                return # kill the function
         else:
             data= data.split(',')
             if (len(data)==8 and validate_data(data)):
@@ -138,7 +138,7 @@ def launch_run_display(done_event,conn):
                 return #kills this function
                 
 
-            if update and not(done):
+            if update:
                 plot.update_label(display_stats(stats))
                 update=False
     
