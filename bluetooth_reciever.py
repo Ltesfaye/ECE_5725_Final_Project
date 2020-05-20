@@ -9,8 +9,6 @@ def bluetooth_client(conn,done_event):
 
     s = BluetoothServer(data_received)#starts RFCOMM Server
     
-    # running = True # used to terminate this process
-
     while not(done_event.wait(0.00001)):
         pass
        
